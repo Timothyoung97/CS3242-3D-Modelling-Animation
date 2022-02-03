@@ -237,3 +237,11 @@
 - In general, you can only contract an edge `ab` if `Lk(a) ∩ Lk(n) = Lk(ab)`
 
 ---
+
+### The Lk(Link) Function in General
+- The link of a vertex `a`, `Lk(a)`, is all the vertices and edges that 'surround' `a`.
+- The link of an edge, `Lk(ab)`, is set of vertices on the neighboring triangles excluding a and b
+
+<img src="public\Screenshot 2022-02-03 182935.png" width=600/>
+
+<img src="public\Screenshot 2022-02-03 183038.png" width=600/>
