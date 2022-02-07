@@ -2,3 +2,12 @@
 *.obj
 *.thing
 *.zip
+*.vcxproj
+*.vcxproj
+*.ipch
+*.db
+*.db-wal
+*.opendb
+*.vcxproj
+*.db-shm
+*.vcxproj
