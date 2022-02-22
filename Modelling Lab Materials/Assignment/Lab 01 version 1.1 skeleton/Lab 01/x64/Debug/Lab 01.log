@@ -1,9 +1,9 @@
 ﻿  main.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(171,33): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(171,26): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
   mesh.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,53): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,15): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,29): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,53): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,15): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,29): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   Generating Code...
-  Lab 01.vcxproj -> C:\TimFolder\Study\AY2122_S2\CS3242\Modelling Lab Materials\Lab 01 version 1.1 skeleton\x64\Debug\Lab 01.exe
+  Lab 01.vcxproj -> C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\x64\Debug\Lab 01.exe
