@@ -16,8 +16,6 @@
 using namespace std;
 
 
-
-
 //#define M_PI 3.141592654
 
 myObjType myObj;
