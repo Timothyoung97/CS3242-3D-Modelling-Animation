@@ -36,13 +36,13 @@ void myObjType::draw() {
 			longestSide = (lmax[i] - lmin[i]);
 	glScalef(4.0 / longestSide, 4.0 / longestSide, 4.0 / longestSide);
 	glTranslated(-(lmin[0] + lmax[0]) / 2.0, -(lmin[1] + lmax[1]) / 2.0, -(lmin[2] + lmax[2]) / 2.0);
-	for (int i = 1; i <= tcount; i++)
+	for (int i = 1; i <= triangleCount; i++)
 	{
 		glBegin(GL_POLYGON);
 // uncomment the following after you computed the normals
 //		glNormal3dv(nlist[i]);    
 		for (int j = 0; j < 3; j++)
-			glVertex3dv(vlist[tlist[i][j]]);
+			glVertex3dv(vertexList[triangleList[i][j]]);
 		glEnd();
 	
 	}
@@ -76,14 +76,14 @@ void myObjType::readFile(char* filename)
 		{
 			if (line[0] == 'v')
 			{
-				vcount++;
+				vertexCount++;
 				i = 1;
 				const char* linec = line.data();
 				for (int k = 0; k < 3; k++) { // k is 0,1,2 for x,y,z
 					while (linec[i] == ' ') i++;
 					j = i;
 					while (linec[j] != ' ') j++;
-					currCood = vlist[vcount][k] = atof(line.substr(i, j - i).c_str());
+					currCood = vertexList[vertexCount][k] = atof(line.substr(i, j - i).c_str());
 					if (firstVertex) 
 						lmin[k] = lmax[k] = currCood;
 					else {
@@ -99,16 +99,16 @@ void myObjType::readFile(char* filename)
 			}
 			if (line[0] == 'f')
 			{
-				tcount++;
+				triangleCount++;
 				i = 1;
 				const char* linec = line.data();
 				for (int k = 0; k < 3; k++) {
 					while (linec[i] == ' ') i++;
 					j = i;
 					while (linec[j] != ' ' && linec[j] != '\\') j++;
-					tlist[tcount][k] = atof(line.substr(i, j - i).c_str());
+					triangleList[triangleCount][k] = atof(line.substr(i, j - i).c_str());
 					i = j;
-					fnlist[tcount][k] = 0;
+					fnextList[triangleCount][k] = 0;
 					while (linec[j] != ' ') j++;
 
 				}
@@ -121,8 +121,8 @@ void myObjType::readFile(char* filename)
 
 	// We suggest you to compute the normals here
 
-    cout << "No. of vertices: " << vcount << endl;
-    cout << "No. of triangles: " << tcount << endl;
+    cout << "No. of vertices: " << vertexCount << endl;
+    cout << "No. of triangles: " << triangleCount << endl;
     computeStat();
 }
 
