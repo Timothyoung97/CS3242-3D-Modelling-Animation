@@ -1,9 +1,4 @@
 // CS3241Lab1.cpp : Defines the entry point for the console application.
-
-
-#include <iostream>
-#include "mesh.h"
-
 #ifdef _WIN32
 #include <Windows.h>
 #include "GL\glut.h"
@@ -12,28 +7,31 @@
 #include <OpenGL/gl.h>
 #include <GLUT/GLUT.h>
 #endif
+#include <iostream>
+#include "mesh.h"
+#define NO_OBJECT 10;
 
-using namespace std;
-
-
-
+using std::cout;
+using std::endl;
 
 //#define M_PI 3.141592654
 
 myObjType myObj;
 
-
 // global variable
 
 bool m_Smooth = FALSE;
+bool m_edges = FALSE;
 bool m_Highlight = FALSE;
+bool m_color_components = FALSE;
+int m_loop_subdividion_version = 1;
+
 GLfloat angle = 0;   /* in degrees */
 GLfloat angle2 = 0;   /* in degrees */
 GLfloat zoom = 1.0;
 int mouseButton = 0;
 int moving, startx, starty;
 
-#define NO_OBJECT 4;
 int current_object = 0;
 
 using namespace std;
@@ -86,9 +84,9 @@ void display(void)
 		glRotatef(angle2, 1.0, 0.0, 0.0);
 		glRotatef(angle, 0.0, 1.0, 0.0);
 		glScalef(zoom, zoom, zoom);
-		myObj.draw();
+		myObj.draw(m_Smooth, m_edges, m_color_components);
 	glPopMatrix();
-	glutSwapBuffers ();
+	glutSwapBuffers();
 }
 
 
@@ -125,8 +123,11 @@ void keyboard (unsigned char key, int x, int y)
 		myObj.writeFile(filename);
 		break;
 	case '1':
+		m_edges = !m_edges;
 	case '2':
+		m_color_components = !m_color_components;
 	case '3':
+		myObj.loopSubdivide(m_loop_subdividion_version);
 	case '4':
 		current_object = key - '1';
 		break;

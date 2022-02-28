@@ -1,63 +1,28 @@
 ﻿  main.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(171,26): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(172,26): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
   mesh.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,53): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(37,15): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(55,1): error C2511: 'void myObjType::writeFile(char *)': overloaded member function not found in 'myObjType'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(22): message : see declaration of 'myObjType'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(59,1): error C2511: 'void myObjType::readFile(char *)': overloaded member function not found in 'myObjType'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(22): message : see declaration of 'myObjType'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(79,16): error C2597: illegal reference to non-static member 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(79,16): error C3867: 'myObjType::vertexCount': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(79,16): error C2105: '++' needs l-value
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,28): error C2597: illegal reference to non-static member 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(24): message : see declaration of 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,39): error C2597: illegal reference to non-static member 'myObjType::vertexList'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,39): error C3867: 'myObjType::vertexList': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,39): error C2597: illegal reference to non-static member 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,39): error C3867: 'myObjType::vertexCount': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(86,39): error C2568: '[': unable to resolve function overload
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,13): error C2597: illegal reference to non-static member 'myObjType::lmin'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,13): error C3867: 'myObjType::lmin': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,13): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,23): error C2597: illegal reference to non-static member 'myObjType::lmax'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,23): error C3867: 'myObjType::lmax': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(88,23): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(90,10): error C2597: illegal reference to non-static member 'myObjType::lmin'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(90,10): error C3867: 'myObjType::lmin': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(90,10): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(91,14): error C2597: illegal reference to non-static member 'myObjType::lmin'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(91,14): error C3867: 'myObjType::lmin': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(91,14): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(92,10): error C2597: illegal reference to non-static member 'myObjType::lmax'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(92,10): error C3867: 'myObjType::lmax': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(92,10): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(93,14): error C2597: illegal reference to non-static member 'myObjType::lmax'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(93,14): error C3867: 'myObjType::lmax': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(93,14): error C2109: subscript requires array or pointer type
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(102,18): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(102,18): error C3867: 'myObjType::triangleCount': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(102,18): error C2105: '++' needs l-value
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,19): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(25): message : see declaration of 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,32): error C2597: illegal reference to non-static member 'myObjType::triangleList'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,32): error C3867: 'myObjType::triangleList': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,32): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,32): error C3867: 'myObjType::triangleCount': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(109,32): error C2568: '[': unable to resolve function overload
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,16): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(25): message : see declaration of 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,29): error C2597: illegal reference to non-static member 'myObjType::fnextList'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,29): error C3867: 'myObjType::fnextList': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,29): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,29): error C3867: 'myObjType::triangleCount': non-standard syntax; use '&' to create a pointer to member
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(111,29): error C2568: '[': unable to resolve function overload
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(124,36): error C2597: illegal reference to non-static member 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(24): message : see declaration of 'myObjType::vertexCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(125,37): error C2597: illegal reference to non-static member 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(25): message : see declaration of 'myObjType::triangleCount'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(126,5): error C2352: 'myObjType::computeStat': illegal call of non-static member function
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.h(71): message : see declaration of 'myObjType::computeStat'
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,53): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,15): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,101): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,71): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,41): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(230,43): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(371,76): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   operationLib.cpp
+  subdivisionLoop.cpp
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\subdivisionLoop.cpp(107,12): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'double', possible loss of data
   Generating Code...
+  Lab 01.vcxproj -> C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\x64\Debug\Lab 01.exe

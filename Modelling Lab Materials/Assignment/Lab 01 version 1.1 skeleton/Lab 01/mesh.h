@@ -20,7 +20,7 @@ inline OrTri sym(OrTri ot) { return 0; };
 
 
 class myObjType {
-private:
+
 	int vertexCount = 0;
 	int triangleCount = 0;
 
@@ -38,11 +38,11 @@ private:
 
 	int uniqueCompCount;
 	bool toggleSubdivision = false;
-	bool toggleDrawSubdivisionEdge = true;
+	bool toggleDrawnSubdivisionEdge = true;
 
 	std::vector<std::vector<double>> colors;
 	std::map<int, int> getComponentID;								// return the componentID for each triangle. 
-	std::map<int, std::set<int>> getAdgFacesFromFace;				// get the adjacent faces given a face
+	std::map<int, std::set<int>> getAdjFacesFromFace;				// get the adjacent faces given a face
 	std::map<int, std::set<int>> getAdjFacesFromVertex;				// get the adjacent faces given a vertex
 	std::map<int, std::set<int>> getAdjVerticesFromVertex;			// get the adjacent vertices given a vertex
 	std::map<std::set<int>, std::set<int>> getAdjFacesFromEdge;		// get the adjacent faces given an edge (vertex1, vertex2)
@@ -52,8 +52,8 @@ private:
 	void processNumOfComponents();
 	bool orientTriangles();
 	void drawEdges();
-	void readFileObj(std::string filename);		// To read in a .obj file
-	void readFileOff(std::string filename);		// To read in a .off file
+	void readObjFile(std::string filename);		// To read in a .obj file
+	void readOffFile(std::string filename);		// To read in a .off file
 	int enext(const int orTri);
 	int sym(const int orTri);
 	int org(const int orTri);
@@ -67,12 +67,11 @@ public:
 	};
 	void readFile(std::string filename);  // assumming file contains a manifold
 	void writeFile(std::string filename);
-	void draw();  
-    void computeStat();
+	void draw(const bool toggleSmooth, const bool toggleEdges, const bool toggleColorComponets);  
 
 	// Subdivision
-	void subdivideLoop(int b_version);
-	void subdivideBarycentrix();
+	void loopSubdivide(int b_version);
+	void barycentrixSubdivide();
 };
 
 
