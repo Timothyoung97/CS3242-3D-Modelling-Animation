@@ -68,7 +68,6 @@ namespace operationLib
 		{
 			vertex0 = triangleList[tIdx][2];
 			vertex1 = triangleList[tIdx][0];
-
 		}
 		return std::make_pair(vertex0, vertex1);
 	}
@@ -132,16 +131,21 @@ namespace operationLib
 		int statMinAngle[18] = { 0 };
 		int statMaxAngle[18] = { 0 };
 
+		// for each triangle
 		for (int i = 1; i <= triangleCount; i++)
-		{
+		{	
+			// get the 3 vertex for the triangle
 			Eigen::Vector3d v1(vertexList[triangleList[i][0]]);
 			Eigen::Vector3d v2(vertexList[triangleList[i][1]]);
 			Eigen::Vector3d v3(vertexList[triangleList[i][2]]);
 
+			// get the 3 vector of the triangle
 			Eigen::Vector3d v1_v2(v2 - v1);
 			Eigen::Vector3d v1_v3(v3 - v1);
 			Eigen::Vector3d v2_v3(v3 - v2);
 
+			// get the 3 angles in the triangle
+			// take note that when calculating the angle, need to ensure that the vectors are originating from the same origin
 			double angle1 = operationLib::computeAngle(v1_v2, v1_v3);
 			double angle2 = operationLib::computeAngle(-v1_v2, v2_v3);
 			double angle3 = 180.0 - angle2 - angle1;
@@ -153,12 +157,13 @@ namespace operationLib
 			statMinAngle[int(floor(min / 10))] += 1;
 			statMaxAngle[int(floor(max / 10))] += 1;
 
+			// Maintainance of [min, max] angle 
 			minAngle = minAngle < min ? minAngle : min;
 			maxAngle = maxAngle > max ? maxAngle : max;
 		}
 
 		cout << endl;
-		for (int i = 0; i < 50; i++) cout << "=";
+		for (int i = 0; i < 100; i++) cout << "=";
 
 		cout << endl;
 		cout << "In all triangles, the minimum angle found = " << minAngle << endl;
@@ -179,27 +184,29 @@ namespace operationLib
 		cout << "Total Count of triangles: " << triangleCount << endl;
 
 		cout << endl;
-		for (int i = 0; i < 50; i++) cout << "=";
+		for (int i = 0; i < 100; i++) cout << "=";
 
 		cout << endl;
 	}
 
 	/// <summary>
-	/// Task: Computing Normal Vectors - Of Vertex
+	/// Main Task: Computing Normal Vectors - Of Vertex
 	/// A function to generate all vertex normals using the average of all adjacent faces, then store in the vertexNormalList
 	/// </summary>
 	/// <param name="vertexNormalList">Empty vertex normal list to be filled</param>
 	/// <param name="triangleNormalList">List of normals of all triangles</param>
-	/// <param name="getVertexFromAdjFace">DS to host all adjacent faces for each vertex</param>
+	/// <param name="getVertexFromAdjFace">DS (Set) to host all adjacent faces for each vertex</param>
 	/// <param name="vertexCount">Total number of vertices</param>
 	void generateVertexNormals(double vertexNormalList[MAXV][3], double triangleNormalList[MAXT][3], std::map<int, std::set<int>> getVertexFromAdjFace, int vertexCount) 
 	{
+		// for each vertex
 		for (int i = 1; i <= vertexCount; i++)
 		{
+			// generate a set of triangle (index) that surrounds the vertex i
 			std::set<int> adjTriIndices = getVertexFromAdjFace[i];
 
+			// Compute a normalize vector using the sum of the surface normal from the surrounding triangles
 			Eigen::Vector3d sumVector(0, 0, 0);
-
 			for (auto const &j : adjTriIndices)
 			{
 				sumVector[0] += triangleNormalList[j][0];
@@ -208,6 +215,7 @@ namespace operationLib
 			}
 			sumVector.normalize();
 
+			// store the vertexs normal into vertex normal list
 			vertexNormalList[i][0] = sumVector[0];
 			vertexNormalList[i][1] = sumVector[1];
 			vertexNormalList[i][2] = sumVector[2];
@@ -215,6 +223,7 @@ namespace operationLib
 	}
 
 	/// <summary>
+	/// Main Task: Computing Normal Vectors - Of Triangle
 	/// A function that computes all the face normals by using cross product, then store in triangleNormalList
 	/// </summary>
 	/// <param name="triangleNormalList">Triangle Normal List</param>
@@ -223,18 +232,23 @@ namespace operationLib
 	/// <param name="triangleCount">Count of triangle</param>
 	void generateFaceNormals(double triangleNormalList[MAXT][3], double vertexList[MAXV][3], int triangleList[MAXT][3], int triangleCount)
 	{
+		// for each triangle
 		for (int i = 1; i <= triangleCount; i++)
 		{
+			// get the 3 vertex making up the triangle
 			Eigen::Vector3d v1(vertexList[triangleList[i][0]]);
 			Eigen::Vector3d v2(vertexList[triangleList[i][1]]);
 			Eigen::Vector3d v3(vertexList[triangleList[i][2]]);
 
+			// compute the 2 vectors needed for cross product
 			Eigen::Vector3d v1_v2(v2 - v1);
 			Eigen::Vector3d v1_v3(v3 - v1);
 
+			// compute normalised cross product
 			Eigen::Vector3d crossProduct = v1_v2.cross(v1_v3);
 			crossProduct.normalize();
 
+			// store into the triangle normal list
 			triangleNormalList[i][0] = crossProduct[0];
 			triangleNormalList[i][1] = crossProduct[1];
 			triangleNormalList[i][2] = crossProduct[2];

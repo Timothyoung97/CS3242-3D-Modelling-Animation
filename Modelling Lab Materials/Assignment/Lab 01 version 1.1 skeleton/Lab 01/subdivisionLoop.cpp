@@ -14,7 +14,7 @@ namespace subdivisionLoop
 	/// <typeparam name="T"></typeparam>
 	/// <param name="x">First number</param>
 	/// <param name="y">Second number</param>
-	/// <param name="limit"></param>
+	/// <param name="ulp">Unit in last place</param>
 	/// <returns></returns>
 	template <class T>
 	typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type approxEqual(T x, T y, int ulp)
@@ -65,7 +65,10 @@ namespace subdivisionLoop
 	}
 
 	/// <summary>
-	/// A function that returns a new vertex in subdivision loop when there is an edge-face. For each edge, computes v = (a+b) / 2
+	/// Reference: http://www.cs.cmu.edu/afs/cs/academic/class/15462-s14/www/lec_slides/Subdivision.pdf pg7-10
+	/// This function is for odd vertices - Calculating of a new vertex for the interior
+	/// A function that returns a new vertex in subdivision loop for the interior
+	/// For each edge, computes v = 3/8 * (a+b) + 1/8 * (c+d)
 	/// </summary>
 	/// <param name="vertexList">Vertex list</param>
 	/// <param name="vertex1IdxOfEdge">Vertex index of an edge</param>
@@ -73,81 +76,90 @@ namespace subdivisionLoop
 	/// <param name="adjacentVertex1">Vertex Index that is next to the edge </param>
 	/// <param name="adjacentVertex2">Vertex Index that is next to the edge</param>
 	/// <returns>New Vertex</returns>
-	Eigen::Vector3d generateOddLoopVertex(double vertexList[MAXV][3], int vertex1IdxOfEdge, int vertex2IdxOfEdge, int adjacentVertex1, int adjacentVertex2)
+	Eigen::Vector3d generateOddLoopVertexInterior(double vertexList[MAXV][3], int vertex1IdxOfEdge, int vertex2IdxOfEdge, int adjacentVertex1, int adjacentVertex2)
 	{
 		Eigen::Vector3d edgeVertex1(vertexList[vertex1IdxOfEdge][0], vertexList[vertex1IdxOfEdge][1], vertexList[vertex1IdxOfEdge][2]);
 		Eigen::Vector3d edgeVertex2(vertexList[vertex2IdxOfEdge][0], vertexList[vertex2IdxOfEdge][1], vertexList[vertex2IdxOfEdge][2]);
 		Eigen::Vector3d adjVertex1(vertexList[adjacentVertex1][0], vertexList[adjacentVertex1][1], vertexList[adjacentVertex1][2]);
 		Eigen::Vector3d adjVertex2(vertexList[adjacentVertex2][0], vertexList[adjacentVertex2][1], vertexList[adjacentVertex2][2]);
-		return 3.0 / 8.0 * (edgeVertex1 + edgeVertex2) + 1.0 / 8.0 * (adjVertex1 + adjVertex2);
+		return 3.0 / 8.0 * (edgeVertex1 + edgeVertex2) + 1.0 / 8.0 * (adjVertex1 + adjVertex2); // v = 3.0 / 8.0 * (a + b) + 1.0 / 8.0 * (c + d)
+
 	}
 
 	/// <summary>
-	/// A function that generate a new vertex in subdivision loop when there is an edge-face. For each edge, computes v=(a + b) / 2
+	/// Reference: http://www.cs.cmu.edu/afs/cs/academic/class/15462-s14/www/lec_slides/Subdivision.pdf pg7-10
+	/// This function is for odd vertices - Calculating of new vertex for the boundary
+	/// A function that returns a new vertex in subdivision loop for the boundary
+	/// For each edge, computes v= (a + b) / 2
 	/// </summary>
 	/// <param name="vertexList">Vertex list</param>
 	/// <param name="vertex1Index">Vertex index of an edge</param>
 	/// <param name="vertex2Index">Partnering index of an edge</param>
 	/// <returns>New vertex</returns>
-	Eigen::Vector3d generateOddLoopVertexEdge(double vertexList[MAXV][3], int vertex1Index, int vertex2Index)
+	Eigen::Vector3d generateOddLoopVertexBoundary(double vertexList[MAXV][3], int vertex1Index, int vertex2Index)
 	{
 		Eigen::Vector3d edgeVertex1(vertexList[vertex1Index][0], vertexList[vertex1Index][1], vertexList[vertex1Index][2]);
 		Eigen::Vector3d edgeVertex2(vertexList[vertex2Index][0], vertexList[vertex2Index][1], vertexList[vertex2Index][2]);
-		return (edgeVertex1 + edgeVertex2) / 2.0;
+		return (edgeVertex1 + edgeVertex2) / 2.0; // v = 1.0 / 2.0 * (a + b)
 	}
 
 	/// <summary>
-	/// A function that generates a new even vertex in subdivision loop when we do not have a edge-face
+	/// Reference: http://www.cs.cmu.edu/afs/cs/academic/class/15462-s14/www/lec_slides/Subdivision.pdf pg7-11
+	/// This function is for even vertices - Calculating of a new vertex for the interior
+	/// A function that returns a new vertex in subdivision loop for the interior
 	/// </summary>
 	/// <param name="vertexList">Vertex list</param>
 	/// <param name="originalVertex">Original Vertex</param>
 	/// <param name="neighboringVertexIndices">set of all neighbouring vertices</param>
-	/// <param name="version">Version == 1 ? 3.0 / 8 / n : 1.0 / n * (5.0 / 8 - pow(3.0 / 8 + 1.0 / 4 * cos(2.0 * M_PI / n), 2))</param>
+	/// <param name="version">B = {2 options, refer to pg15 of the referenced material}</param>
 	/// <returns>New vertex</returns>
-	Eigen::Vector3d generateEvenLoopVertex(double vertexList[MAXV][3], int originalVertex, std::set<int> neighboringVertexIndices, int version)
+	Eigen::Vector3d generateEvenLoopVertexInterior(double vertexList[MAXV][3], int originalVertex, std::set<int> neighboringVertexIndices, int version)
 	{
 		Eigen::Vector3d ogVertex(vertexList[originalVertex][0], vertexList[originalVertex][1], vertexList[originalVertex][2]);
-		double n = neighboringVertexIndices.size();
+		double n = neighboringVertexIndices.size(); // get the number of neighbors that the originalVertex has
 
-		double cal = 0;
-		if (n == 3.0)
+		double B = 0;
+		if (n == 3.0) // if n = 3, B = 3/16
 		{
-			cal = 3.0 / 16;
+			B = 3. / 16;
 		}
-		else 
+		else // if n > 3
 		{
 			if (version == 1)
 			{
-				cal = 3.0 / 8 / n;
+				B = 3.0 / 8 / n; // Warran
 			}
 			else
 			{
-				cal = 1.0 / n * (5.0 / 8 - pow(3.0 / 8 + 1.0 / 4 * cos(2.0 * M_PI / n), 2));
+				B = 1. / n * (5. / 8 - pow(3. / 8 + 1. / 4 * cos(2. * M_PI / n), 2)); // original choice of Loop[16]
 			}
 		}
+
 		Eigen::Vector3d sum(0.0, 0.0, 0.0);
 		for (auto& vertexIndex : neighboringVertexIndices)
 		{
 			Eigen::Vector3d vertex(vertexList[vertexIndex][0], vertexList[vertexIndex][2], vertexList[vertexIndex][2]);
 			sum += vertex;
 		}
-		return ogVertex * (1 - n * cal) + sum * cal;
+		return ogVertex * (1 - n * B) + sum * B; //v = v * ( 1 - k * BETA) + (sum of all k neighbor vertices) * BETA
 	}
 
 	/// <summary>
-	/// A function that generates a new even vertex in the subdivision loop when there is an edge-face.
+	/// Reference: http://www.cs.cmu.edu/afs/cs/academic/class/15462-s14/www/lec_slides/Subdivision.pdf pg7-11
+	/// This function is for even vertices - Calculating of a new vertex for the boundary
+	/// A function that returns a new vertex in subdivision loop for the boundary
 	/// </summary>
 	/// <param name="vertexList">Vertex List</param>
 	/// <param name="originalVertex">Original Vertex</param>
 	/// <param name="vertex1Index">First vertex index of an edge</param>
 	/// <param name="vertex2Index">Second vertex index of an edge</param>
 	/// <returns>New vertex</returns>
-	Eigen::Vector3d generateEvenLoopVertexEdge(double vertexList[MAXV][3], int originalVertex, int vertex1Index, int vertex2Index)
+	Eigen::Vector3d generateEvenLoopVertexBoundary(double vertexList[MAXV][3], int originalVertex, int vertex1Index, int vertex2Index)
 	{
 		Eigen::Vector3d vertexOrigin(vertexList[originalVertex][0], vertexList[originalVertex][1], vertexList[originalVertex][2]);
 		Eigen::Vector3d vertex1(vertexList[vertex1Index][0], vertexList[vertex1Index][1], vertexList[vertex1Index][2]);
 		Eigen::Vector3d vertex2(vertexList[vertex2Index][0], vertexList[vertex2Index][1], vertexList[vertex2Index][2]);
 
-		return 3.0 / 4 * vertexOrigin + 1.0 / 8 * (vertex1 + vertex2);
+		return 3. / 4 * vertexOrigin + 1. / 8 * (vertex1 + vertex2); // v = 1.0 / 8.0 * (a + b) + 3.0 / 4.0 * (v)
 	}
 }

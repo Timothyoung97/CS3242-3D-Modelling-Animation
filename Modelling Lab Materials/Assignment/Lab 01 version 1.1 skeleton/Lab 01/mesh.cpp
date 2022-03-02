@@ -25,6 +25,12 @@
 using std::cout;
 using std::endl;
 
+/// <summary>
+/// A function that draw the object with respect to the toggles set
+/// </summary>
+/// <param name="toggleSmooth">if true draw smooth else !smooth</param>
+/// <param name="toggleEdges">if true draw edge else !edge</param>
+/// <param name="toggleColorComponets">if true show color else !color</param>
 void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorComponets) {
 
 	glEnable(GL_LIGHTING);
@@ -80,7 +86,7 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 		}
 		else 
 		{
-			glColor3f(0.5, 0.5, 0.5);
+			glColor3f(0.5, 0.1, 0.3);
 		}
 
   
@@ -101,6 +107,11 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 	glPopMatrix();
 }
 
+/// <summary>
+/// Main Task: Write an OBJ file
+/// Write the curr displayed data into a obj file
+/// </summary>
+/// <param name="filename"></param>
 void myObjType::writeFile(std::string filename)
 {
 	if (filename.find(".obj") != std::string::npos)
@@ -145,9 +156,13 @@ void myObjType::writeFile(std::string filename)
 		exit(1);
 	}
 
-	cout << "Obejct has been successfully written to disk as ' " << filename << "'" << endl;
+	cout << "Obejct has been successfully written to disk as '" << filename << "'" << endl;
 }
 
+/// <summary>
+/// Optional Task: Read some other file type - Main driver for file reading
+/// </summary>
+/// <param name="filename"></param>
 void myObjType::readFile(std::string filename)
 {
 	if (filename.find(".obj") != std::string::npos)
@@ -165,14 +180,18 @@ void myObjType::readFile(std::string filename)
 	}
 }
 
+/// <summary>
+/// Provided source code for reading obj files
+/// </summary>
+/// <param name="filename"></param>
 void myObjType::readObjFile(std::string filename)
 {
 	vertexCount = 0;
 	triangleCount = 0;
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "_";
+		cout << "=";
 	}
 	cout << endl;
 	cout << "Opening " << filename << endl;
@@ -235,29 +254,30 @@ void myObjType::readObjFile(std::string filename)
 		}
 	}
 
-	cout << "Initializing adjacency lists and fnext list " << endl;
+	cout << "Initializing adjacency lists and fnext list" << endl;
 	setupAdjList();
 
-	cout << "Compute face normal Lists " << endl;
+	cout << "Compute face normal list" << endl;
 	operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
 
-	cout << "Compute vertex normal Lists " << endl;
+	cout << "Compute vertex normal list" << endl;
 	operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
 
 	cout << "Processing orientation of triangles..." << endl;
 	orientTriangles();
 
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "#";
+		cout << "=";
 	}
-	cout << endl;
 
+	cout << endl;
 	cout << "Calculating number of components..." << endl;
 	processNumOfComponents();
-
 	operationLib::generateStatistics(vertexList, vertexCount, triangleList, triangleCount);
+
+	// Assignment of random color
 	colors = std::vector<std::vector<double>>();
 	for (int c = 0; c < uniqueCompCount; c++)
 	{
@@ -269,11 +289,13 @@ void myObjType::readObjFile(std::string filename)
 			}
 		);
 	}
+
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "_";
+		cout << "=";
 	}
+
 	cout << endl;
 }
 
@@ -392,16 +414,18 @@ void myObjType::readOffFile(std::string filename)
 	orientTriangles();
 
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "#";
+		cout << "=";
 	}
-	cout << endl;
 
+	cout << endl;
 	cout << "Calculating number of components..." << endl;
 	processNumOfComponents();
 
 	operationLib::generateStatistics(vertexList, vertexCount, triangleList, triangleCount);
+
+	// Assignment of random color
 	colors = std::vector<std::vector<double>>();
 	for (int c = 0; c < uniqueCompCount; c++)
 	{
@@ -413,15 +437,21 @@ void myObjType::readOffFile(std::string filename)
 			}
 		);
 	}
+
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "_";
+		cout << "=";
 	}
+
 	cout << endl;
 }
 
-
+/// <summary>
+/// Main Task: enext()
+/// </summary>
+/// <param name="orTri">Orientated Triangle Idx</param>
+/// <returns></returns>
 int myObjType::enext(const int orTri)
 {
 	int version = orTri & ((1 << 2) - 1);
@@ -440,6 +470,11 @@ int myObjType::enext(const int orTri)
 	return (triangleIndex << 3) | myMap[version];
 }
 
+/// <summary>
+/// Main Task: sym()
+/// </summary>
+/// <param name="orTri">Oriented Triangle Idx</param>
+/// <returns></returns>
 int myObjType::sym(const int orTri)
 {
 	int version = orTri & ((1 << 2) - 1);
@@ -457,6 +492,11 @@ int myObjType::sym(const int orTri)
 	return (triangleIndex << 3) | myMap[version];
 }
 
+/// <summary>
+/// Main Task: org()
+/// </summary>
+/// <param name="orTri">Oriented Triangle Idx</param>
+/// <returns></returns>
 int myObjType::org(const int orTri) 
 {
 	int version = orTri & ((1 << 2) - 1);
@@ -474,11 +514,21 @@ int myObjType::org(const int orTri)
 	return triangleList[triangleIndex][myMap[version]];
 }
 
+/// <summary>
+/// Main Task: dest()
+/// </summary>
+/// <param name="orTri"></param>
+/// <returns></returns>
 int myObjType::dest(const int orTri)
 {
 	return org(sym(orTri));
 }
 
+/// <summary>
+/// Optional Task: Find the number of components (Independent Surface)
+/// Start from a random triangle and explore its surrounding triangle until exhausted. -> Keep in discoveredIndices set to track the number of discovered triangles
+/// Then select another random triangle from the undiscovered queue and repeat the process above. -> Increment the count of component each time we cconduct the check.
+/// </summary>
 void myObjType::processNumOfComponents()
 {
 	getComponentID = {};
@@ -488,11 +538,10 @@ void myObjType::processNumOfComponents()
 
 	while (discoveredIndices.size() < triangleCount)
 	{
-		int undiscoveredIndex = operationLib::getIndexNotDiscovered(triangleCount, discoveredIndices);
+		int undiscoveredIndex = operationLib::getIndexNotDiscovered(triangleCount, discoveredIndices); // just select one triangle that is not explored
 		undiscoveredIndices.push(undiscoveredIndex);
-		std::set<int> s;
 
-		while (!undiscoveredIndices.empty())
+		while (!undiscoveredIndices.empty()) // explore until all neighors are exhaust
 		{
 			int idx = undiscoveredIndices.front();
 			undiscoveredIndices.pop();
@@ -509,11 +558,14 @@ void myObjType::processNumOfComponents()
 			}
 		}
 		undiscoveredIndices = {};
-		uniqueCompCount++;
+		uniqueCompCount++; // increment the number of components we found so far
 	}
 	cout << "No. of Components: " << uniqueCompCount << endl;
 }
 
+/// <summary>
+/// Temporary Storage kept for easy access
+/// </summary>
 namespace subdivisionOpsStorage
 {
 	int vertexCount = 0;
@@ -643,13 +695,13 @@ void myObjType::loopSubdivide(int version)
 
 			if (adjacentEdgeVertices.size() == 1)
 			{ // We have an adge with only one neighboring face
-				average = subdivisionLoop::generateOddLoopVertexEdge(vertexList, edgeVertexIdx1, edgeVertexIdx2);
+				average = subdivisionLoop::generateOddLoopVertexBoundary(vertexList, edgeVertexIdx1, edgeVertexIdx2);
 			}
 			else
 			{ // We have an edge with two neighboring faces
 				int adjIdx1 = *std::next(adjacentEdgeVertices.begin(), 0);
 				int adjIdx2 = *std::next(adjacentEdgeVertices.begin(), 1);
-				average = subdivisionLoop::generateOddLoopVertex(vertexList, edgeVertexIdx1, edgeVertexIdx2, adjIdx1, adjIdx2);
+				average = subdivisionLoop::generateOddLoopVertexInterior(vertexList, edgeVertexIdx1, edgeVertexIdx2, adjIdx1, adjIdx2);
 			}
 
 			oddVertices.push_back(average);
@@ -658,11 +710,11 @@ void myObjType::loopSubdivide(int version)
 			Eigen::Vector3d newVertex;
 			if (adjacentVertexVertices.size() == 2)
 			{ // We have an adge with only one
-				newVertex = subdivisionLoop::generateEvenLoopVertexEdge(vertexList, edgeVertexIdx1, *std::next(adjacentVertexVertices.begin(), 0), *std::next(adjacentVertexVertices.begin(), 1));
+				newVertex = subdivisionLoop::generateEvenLoopVertexBoundary(vertexList, edgeVertexIdx1, *std::next(adjacentVertexVertices.begin(), 0), *std::next(adjacentVertexVertices.begin(), 1));
 			}
 			else
 			{
-				newVertex = subdivisionLoop::generateEvenLoopVertex(vertexList, edgeVertexIdx1, adjacentVertexVertices, version);
+				newVertex = subdivisionLoop::generateEvenLoopVertexInterior(vertexList, edgeVertexIdx1, adjacentVertexVertices, version);
 			}
 			evenVertices.push_back(newVertex);
 		}
@@ -717,7 +769,7 @@ void myObjType::loopSubdivide(int version)
 	operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
 	operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
 	orientTriangles();
-	processNumOfComponents(); // Don't add it!!!!
+	//processNumOfComponents(); // Don't add it!!!!
 	cout << "No. of vertices: " << vertexCount << endl;
 	cout << "No. of triangles: " << triangleCount << endl;
 
