@@ -1,28 +1,3 @@
 ﻿  main.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(172,26): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
-  mesh.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,53): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(40,15): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,101): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,71): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(80,41): warning C4244: 'argument': conversion from '_Ty' to 'GLfloat', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(230,43): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\mesh.cpp(371,76): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-  operationLib.cpp
-  subdivisionLoop.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\subdivisionLoop.cpp(107,12): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'double', possible loss of data
-  Generating Code...
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\Lab 01\main.cpp(219,26): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
   Lab 01.vcxproj -> C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\Modelling Lab Materials\Assignment\Lab 01 version 1.1 skeleton\x64\Debug\Lab 01.exe

@@ -28,7 +28,6 @@ using std::endl;
 void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorComponets) {
 
 	glEnable(GL_LIGHTING);
-
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_COLOR_MATERIAL);
 
@@ -493,7 +492,7 @@ void myObjType::processNumOfComponents()
 		undiscoveredIndices.push(undiscoveredIndex);
 		std::set<int> s;
 
-		while (!discoveredIndices.empty())
+		while (!undiscoveredIndices.empty())
 		{
 			int idx = undiscoveredIndices.front();
 			undiscoveredIndices.pop();
@@ -860,18 +859,18 @@ void myObjType::setupAdjList()
 		}
 	}
 	
-	for(std::map<std::set<int>, std::set<int>>::const_iterator it = getAdjFacesFromEdge.begin();
-		it != getAdjFacesFromEdge.end(); ++it)
-	{
-		int v0 = *std::next(it->first.begin(), 0);
-		int v1 = *std::next(it->first.begin(), 1);
-		int f0 = *std::next(it->second.begin(), 0);
-		int f1 = *std::next(it->second.begin(), 1);
-		cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
-		<<  (f0 >> 3) << " , v: " << (f0 & ((1 << 2) - 1) ) << "}\n";
-		cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
-		<<  (f1 >> 3) << " , v: " << (f1 & ((1 << 2) - 1) ) << "}\n";
-	}
+	//for(std::map<std::set<int>, std::set<int>>::const_iterator it = getAdjFacesFromEdge.begin();
+	//	it != getAdjFacesFromEdge.end(); ++it)
+	//{
+	//	int v0 = *std::next(it->first.begin(), 0);
+	//	int v1 = *std::next(it->first.begin(), 1);
+	//	int f0 = *std::next(it->second.begin(), 0);
+	//	int f1 = *std::next(it->second.begin(), 1);
+	//	cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
+	//	<<  (f0 >> 3) << " , v: " << (f0 & ((1 << 2) - 1) ) << "}\n";
+	//	cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
+	//	<<  (f1 >> 3) << " , v: " << (f1 & ((1 << 2) - 1) ) << "}\n";
+	//}
   
   // 2. Init adjFacesToFace
 	for (int i = 1; i <= triangleCount; i++)

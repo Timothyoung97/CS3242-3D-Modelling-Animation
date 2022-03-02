@@ -36,12 +36,15 @@ namespace subdivisionLoop
 	std::pair<bool, int> appendVertexToVertexList(double vertexList[MAXV][3], int vertexCount, Eigen::Vector3d vertex)
 	{
 		for (int i = 1; i <= vertexCount; i++)
-		{
+		{	
+			// if the new vertex is almost identical to one vertex in the vertexList, then there is no need to append it into the vertex list
 			if (approxEqual(vertexList[i][0], vertex[0], 2) && approxEqual(vertexList[i][1], vertex[1], 2) && approxEqual(vertexList[i][2], vertex[2], 2))
 			{
 				return std::make_pair(false, i);
 			}
 		}
+
+		// If reached here, we can proceed to add the new vertex into the vertex list. Since this ensures that the new vertex to be added is an essential vertex.
 		vertexList[vertexCount + 1][0] = vertex[0];
 		vertexList[vertexCount + 1][1] = vertex[1];
 		vertexList[vertexCount + 1][2] = vertex[2];

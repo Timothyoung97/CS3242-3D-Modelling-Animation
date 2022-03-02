@@ -27,6 +27,7 @@ namespace operationLib
 	}
 
 	/// <summary>
+	/// Main Task: Compute Angle Statistics (Supporting Function to compute the individual angle)
 	/// A function to compute the angle between two vectors
 	/// </summary>
 	/// <param name="vector1">First Vector</param>
@@ -34,12 +35,17 @@ namespace operationLib
 	/// <returns>(double) Angle in degree</returns>
 	double computeAngle(const Eigen::Vector3d vector1, const Eigen::Vector3d vector2)
 	{
+		// a • b = |a| |b| cos(degree)
+		// degree = cos^-1 ( a • b / |a||b|)
 		double dot = vector1.dot(vector2);
+
+		// acos returns in radian, hence need to convert back to degree
 		return acos(dot / vector1.norm() / vector2.norm()) * 180 / M_PI;
 	}
 
 	/// <summary>
-	/// A function to return the first two vertices (dominate edge) of a given triangle and its version
+	/// A function to return the first two vertices (dominate edge) of a given triangle and its version.
+	/// i.e. Assume triangle abc is version 0, 'ab' will be the first 2 vertices of the given triangle.
 	/// </summary>
 	/// <param name="triangleList">List of triangles</param>
 	/// <param name="tIdx">triangle index</param>
@@ -68,7 +74,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// A function to check whether the object contains edges
+	/// A function to check whether the object contains boundaries
 	/// </summary>
 	/// <param name="fnextList">fnext DS</param>
 	/// <param name="triangleList">Triangle List</param>
@@ -76,22 +82,22 @@ namespace operationLib
 	/// <returns>boolean</returns>
 	bool isObjectContainsEdges(int fnextList[MAXT][3], int triangleList[MAXT][3], int triangleCount)
 	{
-		std::set<std::pair<int, int>> tempEdgeVerticesSet;
+		std::set<std::pair<int, int>> tempEdgeVerticesSet; // a set to store the boundary if found
 
 		// For each triangle
 		for (int i = 1; i <= triangleCount; i++)
 		{
 			for (int version = 0; version < 3; version++) 
 			{
-				int orTriNeighbor = fnextList[i][version];
-				if (orTriNeighbor == 0)
+				int orTriNeighbor = fnextList[i][version]; // get the neighboring triangle
+				if (orTriNeighbor == 0) // boundary
 				{
 					std::pair<int, int> edgeVertices = operationLib::getVerticesFromtIdxAndtVersion(triangleList, i, version);
-					tempEdgeVerticesSet.insert(std::make_pair(edgeVertices.first, edgeVertices.second));
+					tempEdgeVerticesSet.insert(std::make_pair(edgeVertices.first, edgeVertices.second)); // append into the set
 				}
 			}
 		}
-		return !tempEdgeVerticesSet.empty();
+		return !tempEdgeVerticesSet.empty(); // if not empty, then the object is a boundary object.
 	}
 
 	/// <summary>
@@ -107,10 +113,11 @@ namespace operationLib
 	{
 		std::pair<int, int> triangle1Vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx1, tVersion1);
 		std::pair<int, int> triangle2vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx2, tVersion2);
-		return triangle1Vertices == triangle2vertices;
+		return triangle1Vertices == triangle2vertices; // if two triangle has the same orientation, their dominating edge will be the same
 	}
 
 	/// <summary>
+	/// Main Task: Compute Angle Statistics (Driver function for computation of all angles)
 	/// A function to compute the number of triangles, vertices and angles in all triangels and count the number of times they fall in each 10-degree angle slot
 	/// </summary>
 	/// <param name="vertexList">Vertex List</param>
@@ -139,9 +146,10 @@ namespace operationLib
 			double angle2 = operationLib::computeAngle(-v1_v2, v2_v3);
 			double angle3 = 180.0 - angle2 - angle1;
 
-			double min = std::min(std::min(angle1, angle2), angle3);
-			double max = std::max(std::max(angle1, angle2), angle3);
+			double min = std::min(std::min(angle1, angle2), angle3); // find the minimum angle
+			double max = std::max(std::max(angle1, angle2), angle3); // find the maximum angle
 
+			// incremnt accordingly
 			statMinAngle[int(floor(min / 10))] += 1;
 			statMaxAngle[int(floor(max / 10))] += 1;
 
@@ -150,33 +158,34 @@ namespace operationLib
 		}
 
 		cout << endl;
-		for (int i = 0; i < 50; i++)
-			cout << "#";
+		for (int i = 0; i < 50; i++) cout << "=";
+
+		cout << endl;
+		cout << "In all triangles, the minimum angle found = " << minAngle << endl;
+		cout << "In all triangles, the maximum angle found = " << maxAngle << endl;
+
 		cout << endl;
 		cout << "Statistics for Maximum Angles" << endl;
 		for (int i = 0; i < 18; i++)
-			cout << statMaxAngle[i] << " ";
+			cout << statMaxAngle[i] << "|";
+
 		cout << endl;
 		cout << "Statistics for Minimum Angles" << endl;
 		for (int i = 0; i < 18; i++)
-			cout << statMinAngle[i] << " ";
-		cout << endl;
-
-		cout << "Min. angle = " << minAngle << endl;
-		cout << "Max. angle = " << maxAngle << endl;
+			cout << statMinAngle[i] << "|";
 
 		cout << endl;
-
-		cout << "No. of vertices: " << vertexCount << endl;
-		cout << "No. of triangles: " << triangleCount << endl;
+		cout << "Total Count of vertices: " << vertexCount << endl;
+		cout << "Total Count of triangles: " << triangleCount << endl;
 
 		cout << endl;
-		for (int i = 0; i < 50; i++)
-			cout << "#";
+		for (int i = 0; i < 50; i++) cout << "=";
+
 		cout << endl;
 	}
 
 	/// <summary>
+	/// Task: Computing Normal Vectors - Of Vertex
 	/// A function to generate all vertex normals using the average of all adjacent faces, then store in the vertexNormalList
 	/// </summary>
 	/// <param name="vertexNormalList">Empty vertex normal list to be filled</param>

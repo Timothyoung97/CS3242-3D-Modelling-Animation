@@ -96,47 +96,94 @@ void keyboard (unsigned char key, int x, int y)
 {
 	char filename[256];
 	switch (key) {
+	case 'e':
+	case 'E':
+		m_edges = !m_edges;
+		break;
+	case 'c':
+	case 'C':
+		m_color_components = !m_color_components;
+		break;
+	case 'l':
+	case 'L':
+		myObj.loopSubdivide(m_loop_subdividion_version);
+		break;
+	case '8':
+		cout << "Loop subdivison beta formula was changed to 1" << endl;
+		m_loop_subdividion_version = 1;
+		break;
+	case '9':
+		cout << "Loop subdivison beta formula was changed to 2" << endl;
+		m_loop_subdividion_version = 2;
+		break;
+	case 'b':
+	case 'B':
+		myObj.barycentrixSubdivide();
+		break;
 	case 'p':
 	case 'P':
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-		break;			
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
 	case 'w':
 	case 'W':
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		break;			
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		break;
 	case 'v':
 	case 'V':
-		glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
-		break;			
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		break;
 	case 's':
 	case 'S':
 		m_Smooth = !m_Smooth;
 		break;
+
 	case 'h':
 	case 'H':
 		m_Highlight = !m_Highlight;
 		break;
 	case 'o':
 	case 'O':
+	{
 		cout << "Enter the filename you want to write:";
-		cin >> filename;
+		std::cin >> filename;
 		myObj.writeFile(filename);
 		break;
-	case '1':
-		m_edges = !m_edges;
-	case '2':
-		m_color_components = !m_color_components;
-	case '3':
-		myObj.loopSubdivide(m_loop_subdividion_version);
-	case '4':
-		current_object = key - '1';
-		break;
-
+	}
 	case 'Q':
 	case 'q':
 		exit(0);
-	break;
+		break;
+	case '1':
+		myObj.readFile("cube.off");
+		break;
+	case '2':
+		myObj.readFile("teddy.obj");
+		break;
+	case '3':
+		myObj.readFile("cat.obj");
+		break;
+	case '4':
+		myObj.readFile("smallcaseflipped.obj");
+		break;
+	case '5':
+		myObj.readFile("2cubes_orient_edge.obj");
+		break;
+	case '6':
+		myObj.readFile("twocubes.obj");
+		break;
+	case '7':
+		myObj.readFile("face.obj");
+		break;
+	case 'r':
+	case 'R':
 
+	{
+		std::string filename;
+		cout << "Enter the filename you want to open:";
+		std::cin >> filename;
+		myObj.readFile(filename);
+		break;
+	}
 	default:
 	break;
 	}
@@ -188,18 +235,26 @@ int main(int argc, char **argv)
 	cin >> filename;
 	myObj.readFile(filename);
 
-
-
 	//cout << "1-4: Draw different objects"<<endl;
-	cout << "S: Toggle Smooth Shading"<<endl;
-	cout << "H: Toggle Highlight"<<endl;
-	cout << "W: Draw Wireframe"<<endl;
-	cout << "P: Draw Polygon"<<endl;
-	cout << "V: Draw Vertices"<<endl;
-	cout << "Q: Quit" <<endl<< endl;
+	cout << "S: Toggle Smooth Shading" << endl;
+	cout << "H: Toggle Highlight" << endl;
+	cout << "L: Loop Subdivision. Toggle beta-formula by pressing key 8 or 9" << endl;
+	cout << "C: Color Components" << endl;
+	cout << "1-7: Loop through different objects" << endl;
+	cout << "R: Read specific .obj or .off file" << endl;
 
-	cout << "Left mouse click and drag: rotate the object"<<endl;
-	cout << "Right mouse click and drag: zooming"<<endl;
+	cout << "B: Barycentric Subdivision" << endl;
+	cout << "E: Draw Edges" << endl;
+	cout << "W: Draw Wireframe" << endl;
+	cout << "P: Draw Polygon" << endl;
+	cout << "O: Write object to file" << endl;
+
+	cout << "V: Draw Vertices" << endl;
+	cout << "Q: Quit" << endl
+		<< endl;
+
+	cout << "Left mouse click and drag: rotate the object" << endl;
+	cout << "Right mouse click and drag: zooming" << endl;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
