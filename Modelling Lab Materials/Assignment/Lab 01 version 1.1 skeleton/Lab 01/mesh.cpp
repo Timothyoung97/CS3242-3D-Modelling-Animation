@@ -564,7 +564,7 @@ void myObjType::processNumOfComponents()
 }
 
 /// <summary>
-/// Temporary Storage kept for easy access
+/// Temporary Storage kept for production of vertex, triangle during the subdivision loop
 /// </summary>
 namespace subdivisionOpsStorage
 {
@@ -575,19 +575,24 @@ namespace subdivisionOpsStorage
 	std::map<int, int> getComponentID;
 }
 
+/// <summary>
+/// Reference: https://ncatlab.org/nlab/show/subdivision 
+/// Boss
+/// </summary>
 void myObjType::barycentrixSubdivide()
 {
 	cout << endl;
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		cout << "#";
+		cout << "=";
 	}
 	cout << endl;
 	cout << "Barycentric Subdivision in operation..." << endl;
 	for (int i = 1; i <= triangleCount; i++) 
 	{
 		std::vector<Eigen::Vector3d> newVertex;
-
+		
+		// for each version of the triangle, find the dominant edge and calculate the midpoint on the edge
 		for (int version = 0; version < 3; version++)
 		{
 			int edgeVertexIdx1 = triangleList[i][version];
@@ -595,9 +600,10 @@ void myObjType::barycentrixSubdivide()
 
 			Eigen::Vector3d edgeVertex1(vertexList[edgeVertexIdx1][0], vertexList[edgeVertexIdx1][1], vertexList[edgeVertexIdx1][2]);
 			Eigen::Vector3d edgeVertex2(vertexList[edgeVertexIdx2][0], vertexList[edgeVertexIdx2][1], vertexList[edgeVertexIdx2][2]);
-			newVertex.push_back((edgeVertex1 + edgeVertex2) / 2.0);
+			newVertex.push_back((edgeVertex1 + edgeVertex2) / 2.0); // this is the midpoint of the edge
 		}
 
+		// Compute a centroid
 		Eigen::Vector3d v1(vertexList[triangleList[i][0]][0], vertexList[triangleList[i][0]][1], vertexList[triangleList[i][0]][2]);
 		Eigen::Vector3d v2(vertexList[triangleList[i][1]][0], vertexList[triangleList[i][1]][1], vertexList[triangleList[i][1]][2]);
 		Eigen::Vector3d v3(vertexList[triangleList[i][2]][0], vertexList[triangleList[i][2]][1], vertexList[triangleList[i][2]][2]);
@@ -609,35 +615,34 @@ void myObjType::barycentrixSubdivide()
 		newVertex.push_back(v3);
 		newVertex.push_back(centroid);
 
+		// Update Data
 		std::vector<int> newVertexIndices;
 		for (int j = 0; j < 7; j++)
 		{
+			// add the new vertex that is not approximately the samw
 			std::pair<bool, int> result = subdivisionLoop::appendVertexToVertexList(subdivisionOpsStorage::vertexList, subdivisionOpsStorage::vertexCount, newVertex[j]);
 			newVertexIndices.push_back(result.second);
+
+			// increment count of total vertices
 			if (result.first)
-			{
+			{	
 				subdivisionOpsStorage::vertexCount++;
 			}
 		}
 
+		// Linking up of newly formed vertices
 		Eigen::Vector3i t1(newVertexIndices[6], newVertexIndices[3], newVertexIndices[0]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t1);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t2(newVertexIndices[6], newVertexIndices[0], newVertexIndices[4]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t2);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t3(newVertexIndices[6], newVertexIndices[4], newVertexIndices[1]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t3);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t4(newVertexIndices[6], newVertexIndices[1], newVertexIndices[5]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t4);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t5(newVertexIndices[6], newVertexIndices[5], newVertexIndices[2]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t5);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t6(newVertexIndices[6], newVertexIndices[2], newVertexIndices[3]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t6);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 
 	}
 
@@ -648,41 +653,52 @@ void myObjType::barycentrixSubdivide()
 	std::copy(&subdivisionOpsStorage::vertexList[0][0], &subdivisionOpsStorage::vertexList[0][0] + vertexCount * 3 + 3, &vertexList[0][0]);
 
 	cout << "Operation Complete... Processing Statistics... " << endl;
-
+	
+	// recompile Trist
 	setupAdjList();
+
+	// regenerate normals
 	operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
 	operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
-	processNumOfComponents();
 
+	// recalculate components
+	processNumOfComponents();
 	cout << "No. of vertices: " << vertexCount << endl;
 	cout << "No. of triangles: " << triangleCount << endl;
 
+	// reset subdivisionOpsStorage
 	subdivisionOpsStorage::triangleCount = 0;
 	subdivisionOpsStorage::vertexCount = 0;
 	toggleSubdivision = true;
 	toggleDrawnSubdivisionEdge = false;
 
 	cout << endl;
-	for (int i = 0; i < 50; i++)
-		cout << "#";
+	for (int i = 0; i < 100; i++)
+		cout << "=";
+
 	cout << endl;
 }
 
+/// <summary>
+/// Reference: http://www.cs.cmu.edu/afs/cs/academic/class/15462-s14/www/lec_slides/Subdivision.pdf
+/// Boss
+/// </summary>
+/// <param name="version"></param>
 void myObjType::loopSubdivide(int version)
 {
 	cout << endl;
-	for (int i = 0; i < 50; i++)
-		cout << "#";
-	cout << endl;
+	for (int i = 0; i < 100; i++)
+		cout << "=";
 
+	cout << endl;
 	cout << "Loop Subdivision in opertaion..." << endl;
 
-	for (int i = 1; i <= triangleCount; i++)
+	for (int i = 1; i <= triangleCount; i++) // each triangle will be subdivided to 4 new triangles
 	{
 		std::vector<Eigen::Vector3d> oddVertices;
 		std::vector<Eigen::Vector3d> evenVertices;
 
-		for (int version = 0; version < 3; version++)
+		for (int version = 0; version < 3; version++)  // for each edges in a triangle
 		{
 			std::pair<int, int> edgeVertices = std::make_pair(triangleList[i][version], triangleList[i][(version + 1) % 3]);
 			int edgeVertexIdx1 = edgeVertices.first;
@@ -690,28 +706,33 @@ void myObjType::loopSubdivide(int version)
 
 			std::set<int> adjacentEdgeVertices = getAdjVerticesFromEdge[{triangleList[i][version], triangleList[i][(version + 1) % 3]}];
 
-			// 2. Compute one new odd vertex from the two edge vertices
 			Eigen::Vector3d average;
 
+			// Boundary edge
 			if (adjacentEdgeVertices.size() == 1)
-			{ // We have an adge with only one neighboring face
+			{
 				average = subdivisionLoop::generateOddLoopVertexBoundary(vertexList, edgeVertexIdx1, edgeVertexIdx2);
 			}
+			// Interior edge
 			else
-			{ // We have an edge with two neighboring faces
+			{
 				int adjIdx1 = *std::next(adjacentEdgeVertices.begin(), 0);
 				int adjIdx2 = *std::next(adjacentEdgeVertices.begin(), 1);
+				// edgeVertexIdx1 = a, edgeVertexIdx2 = b, adjIdx1 = c, adjIdx2 = d
 				average = subdivisionLoop::generateOddLoopVertexInterior(vertexList, edgeVertexIdx1, edgeVertexIdx2, adjIdx1, adjIdx2);
 			}
 
 			oddVertices.push_back(average);
 
+
 			std::set<int> adjacentVertexVertices = getAdjVerticesFromVertex[edgeVertexIdx1];
 			Eigen::Vector3d newVertex;
+			// boundary edge
 			if (adjacentVertexVertices.size() == 2)
-			{ // We have an adge with only one
+			{
 				newVertex = subdivisionLoop::generateEvenLoopVertexBoundary(vertexList, edgeVertexIdx1, *std::next(adjacentVertexVertices.begin(), 0), *std::next(adjacentVertexVertices.begin(), 1));
 			}
+			// interior edge
 			else
 			{
 				newVertex = subdivisionLoop::generateEvenLoopVertexInterior(vertexList, edgeVertexIdx1, adjacentVertexVertices, version);
@@ -719,7 +740,7 @@ void myObjType::loopSubdivide(int version)
 			evenVertices.push_back(newVertex);
 		}
 
-		// 4. Rebuild mesh / Connect vertices to create new faces
+		// Update data
 		std::vector<int> newVertexIndices;
 		for (int j = 0; j < 3; j++)
 		{
@@ -730,7 +751,7 @@ void myObjType::loopSubdivide(int version)
 				subdivisionOpsStorage::vertexCount++;
 			}
 		}
-
+ 
 		for (int j = 0; j < 3; j++)
 		{
 			std::pair<bool, int> result = subdivisionLoop::appendVertexToVertexList(subdivisionOpsStorage::vertexList, subdivisionOpsStorage::vertexCount, evenVertices[j]);
@@ -744,16 +765,12 @@ void myObjType::loopSubdivide(int version)
 
 		Eigen::Vector3i t1(newVertexIndices[3], newVertexIndices[0], newVertexIndices[2]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t1);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t2(newVertexIndices[0], newVertexIndices[4], newVertexIndices[1]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t2);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t3(newVertexIndices[2], newVertexIndices[0], newVertexIndices[1]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t3);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 		Eigen::Vector3i t4(newVertexIndices[2], newVertexIndices[1], newVertexIndices[5]);
 		subdivisionLoop::appendTriangleToTriangleList(subdivisionOpsStorage::triangleList, subdivisionOpsStorage::triangleCount++, t4);
-		//newSubdivision::componentIDs[newSubdivision::tcount] = componentIDs[i];
 	}
 
 	triangleCount = subdivisionOpsStorage::triangleCount;
@@ -765,25 +782,36 @@ void myObjType::loopSubdivide(int version)
 
 	cout << "Subdivision completed... Recalculating data structures, normals etc. " << endl;
 
+	// recompile Trist
 	setupAdjList();
+
+	// recompute normals
 	operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
 	operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
+	
+	// arrange triangle 
 	orientTriangles();
-	//processNumOfComponents(); // Don't add it!!!!
+
+	processNumOfComponents(); // Don't add it!!!!
 	cout << "No. of vertices: " << vertexCount << endl;
 	cout << "No. of triangles: " << triangleCount << endl;
 
+	// reset subdivsion ops storage
 	subdivisionOpsStorage::triangleCount = 0;
 	subdivisionOpsStorage::vertexCount = 0;
 	toggleSubdivision = true;
 	toggleDrawnSubdivisionEdge = false;
 
 	cout << endl;
-	for (int i = 0; i < 50; i++)
-		cout << "#";
+	for (int i = 0; i < 100; i++)
+		cout << "=";
 	cout << endl;
 }
 
+/// <summary>
+/// A function that helps to rearrange the triangles in same orientation
+/// </summary>
+/// <returns></returns>
 bool myObjType::orientTriangles()
 {
 	std::set<int> discoveredIndices;
@@ -849,7 +877,6 @@ bool myObjType::orientTriangles()
 	else
 	{
 		// Since triangles had to be flipped, we need to recompute the normals and also fnext
-
 		cout << "Successfully oriented " << numOfTriOriented << " triangles!" << endl;
 		cout << "Datastructures have to be recomputed..." << endl;
 		setupAdjList();
@@ -910,19 +937,6 @@ void myObjType::setupAdjList()
 			getAdjFacesFromVertex[vIdx0].insert(i);
 		}
 	}
-	
-	//for(std::map<std::set<int>, std::set<int>>::const_iterator it = getAdjFacesFromEdge.begin();
-	//	it != getAdjFacesFromEdge.end(); ++it)
-	//{
-	//	int v0 = *std::next(it->first.begin(), 0);
-	//	int v1 = *std::next(it->first.begin(), 1);
-	//	int f0 = *std::next(it->second.begin(), 0);
-	//	int f1 = *std::next(it->second.begin(), 1);
-	//	cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
-	//	<<  (f0 >> 3) << " , v: " << (f0 & ((1 << 2) - 1) ) << "}\n";
-	//	cout << "Edge: {" << v0 << ",  " << v1 <<"} -> fnext:{idx: "
-	//	<<  (f1 >> 3) << " , v: " << (f1 & ((1 << 2) - 1) ) << "}\n";
-	//}
   
   // 2. Init adjFacesToFace
 	for (int i = 1; i <= triangleCount; i++)

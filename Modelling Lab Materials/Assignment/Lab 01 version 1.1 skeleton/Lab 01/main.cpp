@@ -273,8 +273,9 @@ int main(int argc, char **argv)
 
     glMatrixMode(GL_PROJECTION);
     gluPerspective( /* field of view in degree */ 40.0,
-  /* aspect ratio */ 1.0,
-    /* Z near */ 1.0, /* Z far */ 80.0);
+		/* aspect ratio */ 1.0,
+		/* Z near */ 1.0, 
+		/* Z far */ 80.0);
 	glMatrixMode(GL_MODELVIEW);
 	glutMainLoop();
 
