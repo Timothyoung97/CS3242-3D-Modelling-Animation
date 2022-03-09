@@ -48,6 +48,7 @@ private:
 	std::map<std::set<int>, std::set<int>> getAdjFacesFromEdge;		// get the adjacent faces given an edge (vertex1, vertex2)
 	std::map<std::set<int>, std::set<int>> getAdjVerticesFromEdge;	// get the adjacent vertices given an edge (vertex1, vertex2)
 
+	void meshSetUp();
 	void setupAdjList();
 	void processNumOfComponents();
 	bool orientTriangles();
@@ -64,14 +65,14 @@ public:
 	myObjType() { 
 		vertexCount = 0; 
 		triangleCount = 0; 
-	};
+	}
 	void readFile(std::string filename);  // assumming file contains a manifold
 	void writeFile(std::string filename);
 	void draw(const bool toggleSmooth, const bool toggleEdges, const bool toggleColorComponets);  
 
 	// Subdivision
 	void loopSubdivide(int b_version);
-	void barycentrixSubdivide();
+	void barycentricSubdivide();
 };
 
 

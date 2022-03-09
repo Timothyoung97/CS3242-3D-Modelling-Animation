@@ -1,8 +1,7 @@
 #ifndef subdivisionLoop_h
-#define subdivisionLoop_h
 #define M_PI 3.141592654
 
-#include <stdio.h>
+#include <cstdio>
 #include "subdivisionLoop.h"
 #endif /* subdivisionLoop_h */
 
@@ -17,10 +16,10 @@ namespace subdivisionLoop
 	/// <param name="ulp">Unit in last place</param>
 	/// <returns></returns>
 	template <class T>
-	typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type approxEqual(T x, T y, int ulp)
+	std::enable_if_t<!std::numeric_limits<T>::is_integer, bool> approxEqual(T x, T y, int ulp)
 	{	
 		// the machine epsilon is scaled to the magnitude of the values used
-		// and multipled with the desired precision in the ulps (units in the last place)
+		// and multiple with the desired precision in the ulps (units in the last place)
 		return std::abs(x - y) <= std::numeric_limits<T>::epsilon() * std::abs(x + y) * ulp
 			// unless the result is subnormal
 			|| std::abs(x - y) < std::numeric_limits<T>::min();
@@ -57,7 +56,7 @@ namespace subdivisionLoop
 	/// <param name="triangleList">Triangle List</param>
 	/// <param name="triangleCount">Number of triangle</param>
 	/// <param name="vertexIndices">Triangle indices to be inserted</param>
-	void appendTriangleToTriangleList(int triangleList[MAXV][3], int triangleCount, Eigen::Vector3i vertexIndices) 
+	void appendTriangleToTriangleList(int triangleList[MAXV][3], int triangleCount, Eigen::Vector3i vertexIndices)
 	{
 		triangleList[triangleCount + 1][0] = vertexIndices[0];
 		triangleList[triangleCount + 1][1] = vertexIndices[1];

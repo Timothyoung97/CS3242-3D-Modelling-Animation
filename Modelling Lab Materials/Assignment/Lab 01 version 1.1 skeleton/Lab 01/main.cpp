@@ -16,15 +16,14 @@ using std::endl;
 
 //#define M_PI 3.141592654
 
-myObjType myObj;
+myObjType myObj; // object to be drawn
 
 // global variable
-
-bool m_Smooth = FALSE;
-bool m_edges = FALSE;
-bool m_Highlight = FALSE;
-bool m_color_components = FALSE;
-int m_loop_subdividion_version = 1;
+bool toggleSmooth = FALSE; 				// flag for smooth/flat shading
+bool toggleEdge = FALSE;				// flag for edge visibility
+bool toggleHighlight = FALSE;			// flag for highlighting
+bool toggleColor = FALSE;				// flag for color
+int switchSubdivLoopBetaVersion = 1; 	// flag for switching between beta and alpha version of subdivision loop
 
 GLfloat angle = 0;   /* in degrees */
 GLfloat angle2 = 0;   /* in degrees */
@@ -66,7 +65,6 @@ void setupLighting()
 
 void display(void)
 {
-
 	float mat_specular[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	float mat_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	float mat_ambient_color[] = { 0.8f, 0.8f, 0.2f, 1.0f };
@@ -84,7 +82,7 @@ void display(void)
 		glRotatef(angle2, 1.0, 0.0, 0.0);
 		glRotatef(angle, 0.0, 1.0, 0.0);
 		glScalef(zoom, zoom, zoom);
-		myObj.draw(m_Smooth, m_edges, m_color_components);
+		myObj.draw(toggleSmooth, toggleEdge, toggleColor);
 	glPopMatrix();
 	glutSwapBuffers();
 }
@@ -98,27 +96,27 @@ void keyboard (unsigned char key, int x, int y)
 	switch (key) {
 	case 'e':
 	case 'E':
-		m_edges = !m_edges;
+		toggleEdge = !toggleEdge;
 		break;
 	case 'c':
 	case 'C':
-		m_color_components = !m_color_components;
+		toggleColor = !toggleColor;
 		break;
 	case 'l':
 	case 'L':
-		myObj.loopSubdivide(m_loop_subdividion_version);
+		myObj.loopSubdivide(switchSubdivLoopBetaVersion);
 		break;
-	case '8':
-		cout << "Loop subdivison beta formula was changed to 1" << endl;
-		m_loop_subdividion_version = 1;
+	case '1':
+		cout << "Loop subdivison beta changed to Warran" << endl;
+		switchSubdivLoopBetaVersion = 1;
 		break;
-	case '9':
-		cout << "Loop subdivison beta formula was changed to 2" << endl;
-		m_loop_subdividion_version = 2;
+	case '2':
+		cout << "Loop subdivison beta changed to Loop[16]" << endl;
+		switchSubdivLoopBetaVersion = 2;
 		break;
 	case 'b':
 	case 'B':
-		myObj.barycentrixSubdivide();
+		myObj.barycentricSubdivide();
 		break;
 	case 'p':
 	case 'P':
@@ -134,12 +132,11 @@ void keyboard (unsigned char key, int x, int y)
 		break;
 	case 's':
 	case 'S':
-		m_Smooth = !m_Smooth;
+		toggleSmooth = !toggleSmooth;
 		break;
-
 	case 'h':
 	case 'H':
-		m_Highlight = !m_Highlight;
+		toggleHighlight = !toggleHighlight;
 		break;
 	case 'o':
 	case 'O':
@@ -152,34 +149,11 @@ void keyboard (unsigned char key, int x, int y)
 	case 'Q':
 	case 'q':
 		exit(0);
-		break;
-	case '1':
-		myObj.readFile("cube.off");
-		break;
-	case '2':
-		myObj.readFile("teddy.obj");
-		break;
-	case '3':
-		myObj.readFile("cat.obj");
-		break;
-	case '4':
-		myObj.readFile("smallcaseflipped.obj");
-		break;
-	case '5':
-		myObj.readFile("2cubes_orient_edge.obj");
-		break;
-	case '6':
-		myObj.readFile("twocubes.obj");
-		break;
-	case '7':
-		myObj.readFile("face.obj");
-		break;
 	case 'r':
 	case 'R':
-
 	{
 		std::string filename;
-		cout << "Enter the filename you want to open:";
+		cout << "Enter the filename of the file you want to open (including file extension):";
 		std::cin >> filename;
 		myObj.readFile(filename);
 		break;
@@ -187,14 +161,10 @@ void keyboard (unsigned char key, int x, int y)
 	default:
 	break;
 	}
-
 	glutPostRedisplay();
 }
 
-
-
-void
-mouse(int button, int state, int x, int y)
+void mouse(int button, int state, int x, int y)
 {
   if (state == GLUT_DOWN) {
 	mouseButton = button;
@@ -229,29 +199,22 @@ int main(int argc, char **argv)
 	char filename[255];
 	cout<<"CS3242 "<< endl<< endl;
 
-
-
-	cout << "Enter the filename you want to open:";
+	cout << "Enter the filename of the file you want to open (including file extension):";
 	cin >> filename;
 	myObj.readFile(filename);
 
-	//cout << "1-4: Draw different objects"<<endl;
 	cout << "S: Toggle Smooth Shading" << endl;
 	cout << "H: Toggle Highlight" << endl;
-	cout << "L: Loop Subdivision. Toggle beta-formula by pressing key 8 or 9" << endl;
+	cout << "L: Loop Subdivision. Switching beta-version by pressing key 1 (Warran) or 2 (Loop[16])" << endl;
 	cout << "C: Color Components" << endl;
-	cout << "1-7: Loop through different objects" << endl;
 	cout << "R: Read specific .obj or .off file" << endl;
-
 	cout << "B: Barycentric Subdivision" << endl;
 	cout << "E: Draw Edges" << endl;
 	cout << "W: Draw Wireframe" << endl;
 	cout << "P: Draw Polygon" << endl;
 	cout << "O: Write object to file" << endl;
-
 	cout << "V: Draw Vertices" << endl;
-	cout << "Q: Quit" << endl
-		<< endl;
+	cout << "Q: Quit" << endl << endl;
 
 	cout << "Left mouse click and drag: rotate the object" << endl;
 	cout << "Right mouse click and drag: zooming" << endl;

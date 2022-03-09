@@ -14,9 +14,9 @@ namespace operationLib
 	/// <param name="triangleCount">Total Counts of Triangles</param>
 	/// <param name="tFound">Set of tIdx that has been discovered</param>
 	/// <returns>min tIdx not discovered in tFound</returns>
-	int getIndexNotDiscovered(int triangleCount, const std::set<int> tFound) 
+	int getIndexNotDiscovered(int triangleCount, const std::set<int> tFound)
 	{
-		for (int i = 1; i <= triangleCount; i++) 
+		for (int i = 1; i <= triangleCount; i++)
 		{
 			if (tFound.find(i) == tFound.end())
 			{
@@ -35,6 +35,7 @@ namespace operationLib
 	/// <returns>(double) Angle in degree</returns>
 	double computeAngle(const Eigen::Vector3d vector1, const Eigen::Vector3d vector2)
 	{
+		// Dot Product
 		// a • b = |a| |b| cos(degree)
 		// degree = cos^-1 ( a • b / |a||b|)
 		double dot = vector1.dot(vector2);
@@ -45,7 +46,7 @@ namespace operationLib
 
 	/// <summary>
 	/// A function to return the first two vertices (dominate edge) of a given triangle and its version.
-	/// i.e. Assume triangle abc is version 0, 'ab' will be the first 2 vertices of the given triangle.
+	/// i.e. Assume triangle 1 version 0 is 'abc', 'ab' will be the first 2 vertices of the given triangle.
 	/// </summary>
 	/// <param name="triangleList">List of triangles</param>
 	/// <param name="tIdx">triangle index</param>
@@ -54,7 +55,7 @@ namespace operationLib
 	std::pair<int, int> getVerticesFromtIdxAndtVersion(int triangleList[MAXT][3], const int tIdx, const int tVersion)
 	{
 		int vertex0, vertex1;
-		if (tVersion == 0) 
+		if (tVersion == 0)
 		{
 			vertex0 = triangleList[tIdx][0];
 			vertex1 = triangleList[tIdx][1];
@@ -64,7 +65,7 @@ namespace operationLib
 			vertex0 = triangleList[tIdx][1];
 			vertex1 = triangleList[tIdx][2];
 		}
-		else 
+		else
 		{
 			vertex0 = triangleList[tIdx][2];
 			vertex1 = triangleList[tIdx][0];
@@ -77,7 +78,7 @@ namespace operationLib
 	/// </summary>
 	/// <param name="fnextList">fnext DS</param>
 	/// <param name="triangleList">Triangle List</param>
-	/// <param name="tCount">Count of Triangles</param>
+	/// <param name="triangleCount">Count of Triangles</param>
 	/// <returns>boolean</returns>
 	bool isObjectContainsEdges(int fnextList[MAXT][3], int triangleList[MAXT][3], int triangleCount)
 	{
@@ -86,13 +87,15 @@ namespace operationLib
 		// For each triangle
 		for (int i = 1; i <= triangleCount; i++)
 		{
-			for (int version = 0; version < 3; version++) 
+			for (int version = 0; version < 3; version++)
 			{
-				int orTriNeighbor = fnextList[i][version]; // get the neighboring triangle
-				if (orTriNeighbor == 0) // boundary
+				int orTriNeighbor = fnextList[i][version]; // get the neighboring triangle by querying the fnext DS
+				if (orTriNeighbor == 0) // if orTriNeighor is 0, this is a boundary triangle
 				{
-					std::pair<int, int> edgeVertices = operationLib::getVerticesFromtIdxAndtVersion(triangleList, i, version);
-					tempEdgeVerticesSet.insert(std::make_pair(edgeVertices.first, edgeVertices.second)); // append into the set
+					std::pair<int, int> edgeVertices = operationLib::getVerticesFromtIdxAndtVersion(
+						triangleList, i, version);
+					tempEdgeVerticesSet.insert(std::make_pair(edgeVertices.first, edgeVertices.second));
+					// append into the set
 				}
 			}
 		}
@@ -108,16 +111,18 @@ namespace operationLib
 	/// <param name="tIdx2">Second Triangle Index</param>
 	/// <param name="tVersion2">Second Triangle Version</param>
 	/// <returns></returns>
-	bool isSameOrientation(int triangleList[MAXT][3], const int tIdx1, const int tVersion1, const int tIdx2, const int tVersion2)
+	bool isSameOrientation(int triangleList[MAXT][3], const int tIdx1, const int tVersion1, const int tIdx2,
+	                       const int tVersion2)
 	{
 		std::pair<int, int> triangle1Vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx1, tVersion1);
 		std::pair<int, int> triangle2vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx2, tVersion2);
-		return triangle1Vertices == triangle2vertices; // if two triangle has the same orientation, their dominating edge will be the same
+		return triangle1Vertices == triangle2vertices;
+		// if two triangle has the same orientation, their dominating edge will be the same
 	}
 
 	/// <summary>
 	/// Main Task: Compute Angle Statistics (Driver function for computation of all angles)
-	/// A function to compute the number of triangles, vertices and angles in all triangels and count the number of times they fall in each 10-degree angle slot
+	/// A function to compute the number of triangles, vertices and angles in all triangles and count the number of times they fall in each 10-degree angle slot
 	/// </summary>
 	/// <param name="vertexList">Vertex List</param>
 	/// <param name="vertexCount">Total Vertex Count</param>
@@ -128,12 +133,12 @@ namespace operationLib
 		double minAngle = 360;
 		double maxAngle = 0;
 
-		int statMinAngle[18] = { 0 };
-		int statMaxAngle[18] = { 0 };
+		int statMinAngle[18] = {0};
+		int statMaxAngle[18] = {0};
 
 		// for each triangle
 		for (int i = 1; i <= triangleCount; i++)
-		{	
+		{
 			// get the 3 vertex for the triangle
 			Eigen::Vector3d v1(vertexList[triangleList[i][0]]);
 			Eigen::Vector3d v2(vertexList[triangleList[i][1]]);
@@ -153,17 +158,17 @@ namespace operationLib
 			double min = std::min(std::min(angle1, angle2), angle3); // find the minimum angle
 			double max = std::max(std::max(angle1, angle2), angle3); // find the maximum angle
 
-			// incremnt accordingly
+			// increment accordingly
 			statMinAngle[int(floor(min / 10))] += 1;
 			statMaxAngle[int(floor(max / 10))] += 1;
 
-			// Maintainance of [min, max] angle 
+			// Maintenance of [min, max] angle 
 			minAngle = minAngle < min ? minAngle : min;
 			maxAngle = maxAngle > max ? maxAngle : max;
 		}
 
 		cout << endl;
-		for (int i = 0; i < 100; i++) cout << "=";
+		for (int i = 0; i < 30; i++) cout << "=";
 
 		cout << endl;
 		cout << "In all triangles, the minimum angle found = " << minAngle << endl;
@@ -171,20 +176,18 @@ namespace operationLib
 
 		cout << endl;
 		cout << "Statistics for Maximum Angles" << endl;
-		for (int i = 0; i < 18; i++)
-			cout << statMaxAngle[i] << "|";
+		for (int i = 0; i < 18; i++) cout << statMaxAngle[i] << "|";
 
 		cout << endl;
 		cout << "Statistics for Minimum Angles" << endl;
-		for (int i = 0; i < 18; i++)
-			cout << statMinAngle[i] << "|";
+		for (int i = 0; i < 18; i++) cout << statMinAngle[i] << "|";
 
 		cout << endl;
 		cout << "Total Count of vertices: " << vertexCount << endl;
 		cout << "Total Count of triangles: " << triangleCount << endl;
 
 		cout << endl;
-		for (int i = 0; i < 100; i++) cout << "=";
+		for (int i = 0; i < 30; i++) cout << "=";
 
 		cout << endl;
 	}
@@ -197,7 +200,8 @@ namespace operationLib
 	/// <param name="triangleNormalList">List of normals of all triangles</param>
 	/// <param name="getVertexFromAdjFace">DS (Set) to host all adjacent faces for each vertex</param>
 	/// <param name="vertexCount">Total number of vertices</param>
-	void generateVertexNormals(double vertexNormalList[MAXV][3], double triangleNormalList[MAXT][3], std::map<int, std::set<int>> getVertexFromAdjFace, int vertexCount) 
+	void generateVertexNormals(double vertexNormalList[MAXV][3], double triangleNormalList[MAXT][3],
+	                           std::map<int, std::set<int>> getVertexFromAdjFace, int vertexCount)
 	{
 		// for each vertex
 		for (int i = 1; i <= vertexCount; i++)
@@ -207,7 +211,7 @@ namespace operationLib
 
 			// Compute a normalize vector using the sum of the surface normal from the surrounding triangles
 			Eigen::Vector3d sumVector(0, 0, 0);
-			for (auto const &j : adjTriIndices)
+			for (auto const& j : adjTriIndices)
 			{
 				sumVector[0] += triangleNormalList[j][0];
 				sumVector[1] += triangleNormalList[j][1];
@@ -215,7 +219,7 @@ namespace operationLib
 			}
 			sumVector.normalize();
 
-			// store the vertexs normal into vertex normal list
+			// store the vertex normal into vertex normal list
 			vertexNormalList[i][0] = sumVector[0];
 			vertexNormalList[i][1] = sumVector[1];
 			vertexNormalList[i][2] = sumVector[2];
@@ -230,7 +234,8 @@ namespace operationLib
 	/// <param name="vertexList">List of vertex</param>
 	/// <param name="triangleList">List of triangle</param>
 	/// <param name="triangleCount">Count of triangle</param>
-	void generateFaceNormals(double triangleNormalList[MAXT][3], double vertexList[MAXV][3], int triangleList[MAXT][3], int triangleCount)
+	void generateFaceNormals(double triangleNormalList[MAXT][3], double vertexList[MAXV][3], int triangleList[MAXT][3],
+	                         int triangleCount)
 	{
 		// for each triangle
 		for (int i = 1; i <= triangleCount; i++)
@@ -244,7 +249,7 @@ namespace operationLib
 			Eigen::Vector3d v1_v2(v2 - v1);
 			Eigen::Vector3d v1_v3(v3 - v1);
 
-			// compute normalised cross product
+			// compute normalized cross product
 			Eigen::Vector3d crossProduct = v1_v2.cross(v1_v3);
 			crossProduct.normalize();
 

@@ -1,18 +1,17 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include "GL\glut.h"
-#define M_PI 3.141592654
 #elif __APPLE__
 #include <OpenGL/gl.h>
 #include <GLUT/GLUT.h>
 #endif
 
-#include "math.h"
+#include "cmath"
 #include "mesh.h"
 #include "operationLib.h"
 #include "subdivisionLoop.h"
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -189,7 +188,7 @@ void myObjType::readObjFile(std::string filename)
 	vertexCount = 0;
 	triangleCount = 0;
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		cout << "=";
 	}
@@ -254,49 +253,8 @@ void myObjType::readObjFile(std::string filename)
 		}
 	}
 
-	cout << "Initializing adjacency lists and fnext list" << endl;
-	setupAdjList();
+	meshSetUp();
 
-	cout << "Compute face normal list" << endl;
-	operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
-
-	cout << "Compute vertex normal list" << endl;
-	operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
-
-	cout << "Processing orientation of triangles..." << endl;
-	orientTriangles();
-
-	cout << endl;
-	for (int i = 0; i < 100; i++)
-	{
-		cout << "=";
-	}
-
-	cout << endl;
-	cout << "Calculating number of components..." << endl;
-	processNumOfComponents();
-	operationLib::generateStatistics(vertexList, vertexCount, triangleList, triangleCount);
-
-	// Assignment of random color
-	colors = std::vector<std::vector<double>>();
-	for (int c = 0; c < uniqueCompCount; c++)
-	{
-		colors.push_back(
-			{ 
-				((double)rand() / (RAND_MAX)), 
-				((double)rand() / (RAND_MAX)), 
-				((double)rand() / (RAND_MAX)) 
-			}
-		);
-	}
-
-	cout << endl;
-	for (int i = 0; i < 100; i++)
-	{
-		cout << "=";
-	}
-
-	cout << endl;
 }
 
 void myObjType::readOffFile(std::string filename)
@@ -401,6 +359,11 @@ void myObjType::readOffFile(std::string filename)
 		lineCount++;
 	}
 
+	meshSetUp();
+}
+
+void myObjType::meshSetUp()
+{
 	cout << "Initializing adjacency lists and fnext list " << endl;
 	setupAdjList();
 
@@ -414,7 +377,7 @@ void myObjType::readOffFile(std::string filename)
 	orientTriangles();
 
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		cout << "=";
 	}
@@ -439,7 +402,7 @@ void myObjType::readOffFile(std::string filename)
 	}
 
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		cout << "=";
 	}
@@ -579,10 +542,10 @@ namespace subdivisionOpsStorage
 /// Reference: https://ncatlab.org/nlab/show/subdivision 
 /// Boss
 /// </summary>
-void myObjType::barycentrixSubdivide()
+void myObjType::barycentricSubdivide()
 {
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		cout << "=";
 	}
@@ -673,7 +636,7 @@ void myObjType::barycentrixSubdivide()
 	toggleDrawnSubdivisionEdge = false;
 
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 		cout << "=";
 
 	cout << endl;
@@ -687,7 +650,7 @@ void myObjType::barycentrixSubdivide()
 void myObjType::loopSubdivide(int version)
 {
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 		cout << "=";
 
 	cout << endl;
@@ -777,8 +740,10 @@ void myObjType::loopSubdivide(int version)
 	vertexCount = subdivisionOpsStorage::vertexCount;
 	//componentIDs = newSubdivision::componentIDs;
 
-	std::copy(&subdivisionOpsStorage::triangleList[0][0], &subdivisionOpsStorage::triangleList[0][0] + triangleCount * 3 + 3, &triangleList[0][0]);
-	std::copy(&subdivisionOpsStorage::vertexList[0][0], &subdivisionOpsStorage::vertexList[0][0] + vertexCount * 3 + 3, &vertexList[0][0]);
+	std::copy(&subdivisionOpsStorage::triangleList[0][0],
+	          &subdivisionOpsStorage::triangleList[0][0] + triangleCount * 3 + 3, &triangleList[0][0]);
+	std::copy(&subdivisionOpsStorage::vertexList[0][0], &subdivisionOpsStorage::vertexList[0][0] + vertexCount * 3 + 3,
+	          &vertexList[0][0]);
 
 	cout << "Subdivision completed... Recalculating data structures, normals etc. " << endl;
 
@@ -803,7 +768,7 @@ void myObjType::loopSubdivide(int version)
 	toggleDrawnSubdivisionEdge = false;
 
 	cout << endl;
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 30; i++)
 		cout << "=";
 	cout << endl;
 }
@@ -877,8 +842,8 @@ bool myObjType::orientTriangles()
 	else
 	{
 		// Since triangles had to be flipped, we need to recompute the normals and also fnext
-		cout << "Successfully oriented " << numOfTriOriented << " triangles!" << endl;
-		cout << "Datastructures have to be recomputed..." << endl;
+		cout << "Successfully orientated " << numOfTriOriented << " triangles!" << endl;
+		cout << "DS have to be recomputed..." << endl;
 		setupAdjList();
 		operationLib::generateFaceNormals(triangleNormalList, vertexList, triangleList, triangleCount);
 		operationLib::generateVertexNormals(vertexNormalList, triangleNormalList, getAdjFacesFromVertex, vertexCount);
