@@ -47,7 +47,7 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 	// Ensure that the below strings are only printed once
 	static bool isMessageGenerated;
 	static std::string edgeAbsentMessage = "No edge in Obj.";
-	static std::string edgeDrawnCompleteMassage = "Edge Drawn.";
+	static std::string edgeDrawnCompleteMassage = "All edges Drawn.";
 
 	if (toggleEdges && operationLib::isObjectContainsBoundary(fnextList, triangleList, triangleCount))
 	{
@@ -297,7 +297,7 @@ void myObjType::readOffFile(std::string filename)
 		{
 			if (line.substr(0, 3) != "OFF")
 			{
-				cout << "The folloing file does not follow a .off format " << filename << endl;
+				cout << "The following file does not follow a .off format " << filename << endl;
 				exit(1);
 			}
 		}
@@ -315,13 +315,13 @@ void myObjType::readOffFile(std::string filename)
 				if (lineCount <= numVertices + 1) { // Vertex
 					vertexCount++;
 					i = 0;
-					const char* linec = line.data();
+					const char* currLine = line.data();
 					for (int k = 0; k < 3; k++)
 					{ // k is 0,1,2 for x,y,z
-						while (linec[i] == ' ')
+						while (currLine[i] == ' ')
 							i++;
 						j = i;
-						while (linec[j] != ' ')
+						while (currLine[j] != ' ')
 							j++;
 						currCood = vertexList[vertexCount][k] = atof(line.substr(i, j - i).c_str());
 						if (firstVertex)
@@ -345,19 +345,19 @@ void myObjType::readOffFile(std::string filename)
 					}
 					triangleCount++;
 					i = 1;
-					const char* linec = line.data();
+					const char* currLine = line.data();
 					for (int k = 0; k < 3; k++)
 					{
-						while (linec[i] == ' ')
+						while (currLine[i] == ' ')
 							i++;
 						j = i;
-						while (linec[j] != ' ' && linec[j] != '\\')
+						while (currLine[j] != ' ' && currLine[j] != '\\')
 							j++;
 
-						triangleList[triangleCount][k] = atof(line.substr(i, j - i).c_str()) + 1; // !! In .off file, vertex indices start at 1
+						triangleList[triangleCount][k] = atof(line.substr(i, j - i).c_str()) + 1; // !! For .off file, vertex indices is starting at 1
 						i = j;
 						fnextList[triangleCount][k] = 0;
-						while (linec[j] != ' ')
+						while (currLine[j] != ' ')
 							j++;
 					}
 				}
@@ -399,7 +399,7 @@ void myObjType::meshSetUp()
 
 	operationLib::generateStatistics(vertexList, vertexCount, triangleList, triangleCount);
 
-	// Assignment of random color
+	// Randomly assign colors to all components
 	colors = std::vector<std::vector<double>>();
 	for (int c = 0; c < uniqueCompCount; c++)
 	{
@@ -508,7 +508,7 @@ void myObjType::setupAdjList()
 	getAdjVerticesFromEdge = {};
 	getAdjVerticesFromVertex = {};
 
-	// 1. Init adjFacesToEdge, adjVerticesToVertex and adjFacesToVertex
+	// Set up list of getAdjFacesFromEdge, getAdjVerticesFromVertex and getAdjFacesToVertex
 	// For an edge given by two vertices, store the adjacent faces
 	for (int i = 1; i <= triangleCount; i++)
 	{
@@ -521,13 +521,13 @@ void myObjType::setupAdjList()
 			int orTri = i << 3 | version;
 			getAdjFacesFromEdge[key].insert(orTri);
 			getAdjVerticesFromEdge[key].insert(vIdx2);
+			getAdjFacesFromVertex[vIdx0].insert(i);
 			getAdjVerticesFromVertex[vIdx0].insert(vIdx1);
 			getAdjVerticesFromVertex[vIdx0].insert(vIdx2);
-			getAdjFacesFromVertex[vIdx0].insert(i);
 		}
 	}
 
-	// 2. Init adjFacesToFace
+	// Set up getAdjFacesToFace
 	for (int i = 1; i <= triangleCount; i++)
 	{
 		for (int version = 0; version < 3; version++)
@@ -537,7 +537,7 @@ void myObjType::setupAdjList()
 			std::set<int> opposite_faces = getAdjFacesFromEdge[key];
 			int face0 = *std::next(opposite_faces.begin(), 0);
 			int face1 = *std::next(opposite_faces.begin(), 1);
-			// If face1 index is not <=tcount, then this is not a face, but an edge face! -> Store 0
+			// If face1 index > triangle count, then this is a boundary face! -> Store 0
 			if (opposite_faces.size() == 1)
 			{
 				face1 = 0;
@@ -547,7 +547,7 @@ void myObjType::setupAdjList()
 			fnextList[i][version] = fnext;
 
 			if (fnext != 0)
-			{ // If no edge vertex
+			{ // not edge vertex
 				getAdjFacesFromFace[i].insert(fnext >> 3);
 			}
 		}
@@ -826,7 +826,7 @@ void myObjType::loopSubdivide(int version)
 	// arrange triangle 
 	orientTriangles();
 
-	processNumOfComponents(); // Don't add it!!!!
+	processNumOfComponents();
 	cout << "No. of vertices: " << vertexCount << endl;
 	cout << "No. of triangles: " << triangleCount << endl;
 
