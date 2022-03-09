@@ -4,7 +4,7 @@
 - Name: Yang Shiyuan
 - Matrix No: A0214269A
 
-### Instructions
+### Instructions for application testing
 1. Unzip the zip file `A0214269A_Assignment1.zip`.
 2. Navigate to the folder `./x64/Release/`.
 3. Locate the application `Lab 01.exe` file.
@@ -29,7 +29,27 @@
    10. Press `V` to toggle on the model in its vertex form.
    11. Press `Q` to exit the application.
 6.  Several models have been loaded in the same folder as the `Lab 01.exe` application. They are ready for your usage.
-    1.  
+    1.  `cat.obj`
+    2.  `pikachu.obj`
+    3.  `deer.obj`
+    4.  `teapot.obj`
+    5.  `teddy.obj`
+    6.  `cube.off`
+    7.  `cubes.off`
+
+### Instructions for project development
+1. Unzip the zip file `A0214269A_Assignment1.zip`.
+2. Double click on `Lab 01.sln` to open the Visual Studio Solution.
+   1. Please ensure that you have the latest version of Visual Studio before loading up the `Lab 01.sln` file.
+3. Press `Ctrl + Alt + L` to open the solution explorer to explore the project.
+4. To test, press the play button `Local Windows Debugger`. Ensure that the following settings are configured as such:
+   1. Configuration: `Release`
+   2. Platform `x86`
+   3. - [x] Build Option
+5. **Please ensure that you have the `eigen` C++ library installed in your local machine. This library is required for the project to run**
+   1. Refer to the following link to install `eigen` C++ library in your local machine:
+      1. https://www.youtube.com/watch?v=6mMjv-tA5Jk&t=270s&ab_channel=FromScratch
+
 ### Task Completion
 
 | S/N | Task Details | Nature | Implementation |
