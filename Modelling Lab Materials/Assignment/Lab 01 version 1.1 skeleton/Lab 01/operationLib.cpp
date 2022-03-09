@@ -14,13 +14,13 @@ namespace operationLib
 	///	then traverse the set to locate the last discovered triangle.
 	/// </summary>
 	/// <param name="triangleCount">Total Counts of Triangles</param>
-	/// <param name="tFound">Set of tIdx that has been discovered</param>
+	/// <param name="triangleFoundList">Set of tIdx that has been discovered</param>
 	/// <returns>min tIdx not discovered in tFound</returns>
-	int getIndexNotDiscovered(int triangleCount, const std::set<int> tFound)
+	int getIndexNotDiscovered(int triangleCount, const std::set<int> triangleFoundList)
 	{
 		for (int i = 1; i <= triangleCount; i++)
 		{
-			if (tFound.find(i) == tFound.end())
+			if (triangleFoundList.find(i) == triangleFoundList.end())
 			{
 				return i;
 			}

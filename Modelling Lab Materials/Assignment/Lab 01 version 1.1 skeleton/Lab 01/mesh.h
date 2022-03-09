@@ -9,6 +9,7 @@
 #define MAXV 1000000
 #define MAXT 1000000
 
+// legacy code from original mesh file
 //typedef int OrTri;
 //typedef int tIdx;
 //
