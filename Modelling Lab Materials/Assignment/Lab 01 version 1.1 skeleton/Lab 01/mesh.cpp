@@ -405,9 +405,9 @@ void myObjType::meshSetUp()
 	{
 		colors.push_back(
 			{
-				((double)rand() / (RAND_MAX)),
-				((double)rand() / (RAND_MAX)),
-				((double)rand() / (RAND_MAX))
+				((double) rand() / (RAND_MAX)),
+				((double) rand() / (RAND_MAX)),
+				((double) rand() / (RAND_MAX))
 			}
 		);
 	}
