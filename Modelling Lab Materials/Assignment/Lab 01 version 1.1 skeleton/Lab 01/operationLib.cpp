@@ -9,7 +9,9 @@ using std::endl;
 namespace operationLib
 {
 	/// <summary>
-	/// A fucntion that returns a smallest tIdx (from 1 to triangleCount) that is not discovered yet.
+	/// A function that returns a smallest tIdx (from 1 to triangleCount) that is not discovered yet.
+	///	This function will take in a set of all triangle that has been found
+	///	then traverse the set to locate the last discovered triangle.
 	/// </summary>
 	/// <param name="triangleCount">Total Counts of Triangles</param>
 	/// <param name="tFound">Set of tIdx that has been discovered</param>
@@ -27,7 +29,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// Main Task: Compute Angle Statistics (Supporting Function to compute the individual angle)
+	/// (*) Main Task: Compute Angle Statistics (Supporting Function to compute the individual angle)
 	/// A function to compute the angle between two vectors
 	/// </summary>
 	/// <param name="vector1">First Vector</param>
@@ -45,7 +47,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// A function to return the first two vertices (dominate edge) of a given triangle and its version.
+	/// A function to return the first two vertices index (dominate edge) of a given triangle and its version.
 	/// i.e. Assume triangle 1 version 0 is 'abc', 'ab' will be the first 2 vertices of the given triangle.
 	/// </summary>
 	/// <param name="triangleList">List of triangles</param>
@@ -80,7 +82,7 @@ namespace operationLib
 	/// <param name="triangleList">Triangle List</param>
 	/// <param name="triangleCount">Count of Triangles</param>
 	/// <returns>boolean</returns>
-	bool isObjectContainsEdges(int fnextList[MAXT][3], int triangleList[MAXT][3], int triangleCount)
+	bool isObjectContainsBoundary(int fnextList[MAXT][3], int triangleList[MAXT][3], int triangleCount)
 	{
 		std::set<std::pair<int, int>> tempEdgeVerticesSet; // a set to store the boundary if found
 
@@ -103,7 +105,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// A function to verify whether 2 given triangles have the same orientation
+	/// A function to verify whether 2 given triangles have the different orientation
 	/// </summary>
 	/// <param name="triangleList">Triangle List</param>
 	/// <param name="tIdx1">First Triangle Index</param>
@@ -111,17 +113,17 @@ namespace operationLib
 	/// <param name="tIdx2">Second Triangle Index</param>
 	/// <param name="tVersion2">Second Triangle Version</param>
 	/// <returns></returns>
-	bool isSameOrientation(int triangleList[MAXT][3], const int tIdx1, const int tVersion1, const int tIdx2,
+	bool isDifferentOrientation(int triangleList[MAXT][3], const int tIdx1, const int tVersion1, const int tIdx2,
 	                       const int tVersion2)
 	{
 		std::pair<int, int> triangle1Vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx1, tVersion1);
 		std::pair<int, int> triangle2vertices = getVerticesFromtIdxAndtVersion(triangleList, tIdx2, tVersion2);
 		return triangle1Vertices == triangle2vertices;
-		// if two triangle has the same orientation, their dominating edge will be the same
+		// if the 2 neighboring triangles have the different orientation, i.e. one is ccw and another is cw, their common edge will be in the same direction
 	}
 
 	/// <summary>
-	/// Main Task: Compute Angle Statistics (Driver function for computation of all angles)
+	/// (*) Main Task: Compute Angle Statistics (Driver function for computation of all angles)
 	/// A function to compute the number of triangles, vertices and angles in all triangles and count the number of times they fall in each 10-degree angle slot
 	/// </summary>
 	/// <param name="vertexList">Vertex List</param>
@@ -193,7 +195,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// Main Task: Computing Normal Vectors - Of Vertex
+	/// (*) Main Task: Computing Normal Vectors - Of Vertex
 	/// A function to generate all vertex normals using the average of all adjacent faces, then store in the vertexNormalList
 	/// </summary>
 	/// <param name="vertexNormalList">Empty vertex normal list to be filled</param>
@@ -227,7 +229,7 @@ namespace operationLib
 	}
 
 	/// <summary>
-	/// Main Task: Computing Normal Vectors - Of Triangle
+	/// (*) Main Task: Computing Normal Vectors - Of Triangle
 	/// A function that computes all the face normals by using cross product, then store in triangleNormalList
 	/// </summary>
 	/// <param name="triangleNormalList">Triangle Normal List</param>

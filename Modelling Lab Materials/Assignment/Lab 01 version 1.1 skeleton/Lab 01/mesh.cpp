@@ -49,9 +49,9 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 	static std::string edgeAbsentMessage = "No edge in Obj.";
 	static std::string edgeDrawnCompleteMassage = "Edge Drawn.";
 
-	if (toggleEdges && operationLib::isObjectContainsEdges(fnextList, triangleList, triangleCount))
+	if (toggleEdges && operationLib::isObjectContainsBoundary(fnextList, triangleList, triangleCount))
 	{
-		drawEdges();
+		drawEdges(); // Draw the edges
 		glDisable(GL_LIGHTING);
 		glPopMatrix();
 		if (!isMessageGenerated || !toggleDrawnSubdivisionEdge)
@@ -62,7 +62,7 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 		}
 		return;
 	}
-	else if (toggleEdges && !operationLib::isObjectContainsEdges(fnextList, triangleList, triangleCount))
+	else if (toggleEdges && !operationLib::isObjectContainsBoundary(fnextList, triangleList, triangleCount))
 	{
 		if (!isMessageGenerated || !toggleDrawnSubdivisionEdge)
 		{
@@ -85,10 +85,9 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 		}
 		else 
 		{
-			glColor3f(0.5, 0.1, 0.3);
+			glColor3f(0.1, 0.1, 0.3);
 		}
 
-  
 		for (int j = 0; j < 3; j++) 
 		{
 			if (toggleSmooth) 
@@ -107,7 +106,8 @@ void myObjType::draw(bool toggleSmooth, bool toggleEdges, bool toggleColorCompon
 }
 
 /// <summary>
-/// Main Task: Write an OBJ file
+/// Reference for OFF file format: https://en.wikipedia.org/wiki/OFF_(file_format)
+/// (*) Main Task: Write an OBJ file or an OFF file
 /// Write the curr displayed data into a obj file
 /// </summary>
 /// <param name="filename"></param>
@@ -155,11 +155,12 @@ void myObjType::writeFile(std::string filename)
 		exit(1);
 	}
 
-	cout << "Obejct has been successfully written to disk as '" << filename << "'" << endl;
+	cout << "Object has been successfully written to disk as '" << filename << "'" << endl;
 }
 
 /// <summary>
-/// Optional Task: Read some other file type - Main driver for file reading
+/// Reference for OFF file format: https://en.wikipedia.org/wiki/OFF_(file_format)
+/// (*) Optional Task: Read some other file type - Main driver for file reading
 /// </summary>
 /// <param name="filename"></param>
 void myObjType::readFile(std::string filename)
@@ -257,6 +258,12 @@ void myObjType::readObjFile(std::string filename)
 
 }
 
+
+/// <summary>
+/// Reference for OFF file format: https://en.wikipedia.org/wiki/OFF_(file_format)
+///	A function to read an OFF file.
+/// </summary>
+/// <param name="filename"></param>
 void myObjType::readOffFile(std::string filename)
 {
 	vertexCount = 0;
@@ -362,6 +369,10 @@ void myObjType::readOffFile(std::string filename)
 	meshSetUp();
 }
 
+
+/**
+ * \brief a driver function that process the information read from the file
+ */
 void myObjType::meshSetUp()
 {
 	cout << "Initializing adjacency lists and fnext list " << endl;
@@ -411,7 +422,7 @@ void myObjType::meshSetUp()
 }
 
 /// <summary>
-/// Main Task: enext()
+/// (*) Main Task: enext()
 /// </summary>
 /// <param name="orTri">Orientated Triangle Idx</param>
 /// <returns></returns>
@@ -434,7 +445,7 @@ int myObjType::enext(const int orTri)
 }
 
 /// <summary>
-/// Main Task: sym()
+/// (*) Main Task: sym()
 /// </summary>
 /// <param name="orTri">Oriented Triangle Idx</param>
 /// <returns></returns>
@@ -456,7 +467,7 @@ int myObjType::sym(const int orTri)
 }
 
 /// <summary>
-/// Main Task: org()
+/// (*) Main Task: org()
 /// </summary>
 /// <param name="orTri">Oriented Triangle Idx</param>
 /// <returns></returns>
@@ -478,7 +489,7 @@ int myObjType::org(const int orTri)
 }
 
 /// <summary>
-/// Main Task: dest()
+/// (*) Main Task: dest()
 /// </summary>
 /// <param name="orTri"></param>
 /// <returns></returns>
@@ -487,8 +498,65 @@ int myObjType::dest(const int orTri)
 	return org(sym(orTri));
 }
 
+
+void myObjType::setupAdjList()
+{
+	cout << "Generating adjacency lists... " << endl;
+	getAdjFacesFromVertex = {};
+	getAdjFacesFromEdge = {};
+	getAdjFacesFromFace = {};
+	getAdjVerticesFromEdge = {};
+	getAdjVerticesFromVertex = {};
+
+	// 1. Init adjFacesToEdge, adjVerticesToVertex and adjFacesToVertex
+	// For an edge given by two vertices, store the adjacent faces
+	for (int i = 1; i <= triangleCount; i++)
+	{
+		for (int version = 0; version < 3; version++)
+		{
+			int vIdx0 = triangleList[i][version];
+			int vIdx1 = triangleList[i][(version + 1) % 3];
+			int vIdx2 = triangleList[i][(version + 2) % 3];
+			std::set<int> key = { vIdx0, vIdx1 };
+			int orTri = i << 3 | version;
+			getAdjFacesFromEdge[key].insert(orTri);
+			getAdjVerticesFromEdge[key].insert(vIdx2);
+			getAdjVerticesFromVertex[vIdx0].insert(vIdx1);
+			getAdjVerticesFromVertex[vIdx0].insert(vIdx2);
+			getAdjFacesFromVertex[vIdx0].insert(i);
+		}
+	}
+
+	// 2. Init adjFacesToFace
+	for (int i = 1; i <= triangleCount; i++)
+	{
+		for (int version = 0; version < 3; version++)
+		{
+			std::set<int> key = { triangleList[i][version], triangleList[i][(version + 1) % 3] };
+
+			std::set<int> opposite_faces = getAdjFacesFromEdge[key];
+			int face0 = *std::next(opposite_faces.begin(), 0);
+			int face1 = *std::next(opposite_faces.begin(), 1);
+			// If face1 index is not <=tcount, then this is not a face, but an edge face! -> Store 0
+			if (opposite_faces.size() == 1)
+			{
+				face1 = 0;
+			}
+
+			int fnext = i == (face0 >> 3) ? face1 : face0; // Opposite face is the one that is not the current_face
+			fnextList[i][version] = fnext;
+
+			if (fnext != 0)
+			{ // If no edge vertex
+				getAdjFacesFromFace[i].insert(fnext >> 3);
+			}
+		}
+	}
+}
+
+
 /// <summary>
-/// Optional Task: Find the number of components (Independent Surface)
+/// (*) Optional Task: Find the number of components (Independent Surface)
 /// Start from a random triangle and explore its surrounding triangle until exhausted. -> Keep in discoveredIndices set to track the number of discovered triangles
 /// Then select another random triangle from the undiscovered queue and repeat the process above. -> Increment the count of component each time we cconduct the check.
 /// </summary>
@@ -499,6 +567,7 @@ void myObjType::processNumOfComponents()
 	std::set<int> discoveredIndices;
 	std::queue<int> undiscoveredIndices;
 
+	// Perform Depth First Search
 	while (discoveredIndices.size() < triangleCount)
 	{
 		int undiscoveredIndex = operationLib::getIndexNotDiscovered(triangleCount, discoveredIndices); // just select one triangle that is not explored
@@ -800,7 +869,7 @@ bool myObjType::orientTriangles()
 				{ // If no edge vertex
 					int neighbor_index = orTri_neighbor >> 3;
 					int neighbor_version = orTri_neighbor & ((1 << 2) - 1);
-					bool hasConflict = operationLib::isSameOrientation(triangleList, idx, version, neighbor_index, neighbor_version);
+					bool hasConflict = operationLib::isDifferentOrientation(triangleList, idx, version, neighbor_index, neighbor_version);
 					if (discoveredIndices.find(neighbor_index) != discoveredIndices.end())
 					{ // Already seen
 						if (hasConflict)
@@ -869,62 +938,6 @@ void myObjType::drawEdges()
 				glVertex3dv(vertexList[edgeVertices.first]);
 				glVertex3dv(vertexList[edgeVertices.second]);
 				glEnd();
-			}
-		}
-	}
-}
-
-void myObjType::setupAdjList()
-{
-	cout << "Generating adjacency lists... " << endl;
-	getAdjFacesFromVertex = {};
-	getAdjFacesFromEdge = {};
-	getAdjFacesFromFace = {};
-	getAdjVerticesFromEdge = {};
-	getAdjVerticesFromVertex = {};
-
-	// 1. Init adjFacesToEdge, adjVerticesToVertex and adjFacesToVertex
-	// For an edge given by two vertices, store the adjacent faces
-	for (int i = 1; i <= triangleCount; i++)
-	{
-		for (int version = 0; version < 3; version++)
-		{
-			int vIdx0 = triangleList[i][version];
-			int vIdx1 = triangleList[i][(version + 1) % 3];
-			int vIdx2 = triangleList[i][(version + 2) % 3];
-			std::set<int> key = { vIdx0, vIdx1 };
-			int orTri = i << 3 | version;
-			getAdjFacesFromEdge[key].insert(orTri);
-			getAdjVerticesFromEdge[key].insert(vIdx2);
-
-			getAdjVerticesFromVertex[vIdx0].insert(vIdx1);
-			getAdjVerticesFromVertex[vIdx0].insert(vIdx2);
-			getAdjFacesFromVertex[vIdx0].insert(i);
-		}
-	}
-  
-  // 2. Init adjFacesToFace
-	for (int i = 1; i <= triangleCount; i++)
-	{
-		for (int version = 0; version < 3; version++)
-		{
-			std::set<int> key = { triangleList[i][version], triangleList[i][(version + 1) % 3] };
-
-			std::set<int> opposite_faces = getAdjFacesFromEdge[key];
-			int face0 =*std::next(opposite_faces.begin(), 0);
-			int face1 =*std::next(opposite_faces.begin(), 1);
-			// If face1 index is not <=tcount, then this is not a face, but an edge face! -> Store 0
-			if (opposite_faces.size() == 1)
-			{
-				face1 = 0;
-			}
-
-			int fnext = i == (face0 >> 3) ? face1 : face0; // Opposite face is the one that is not the current_face
-			fnextList[i][version] = fnext;
-
-			if (fnext != 0)
-			{ // If no edge vertex
-				getAdjFacesFromFace[i].insert(fnext >> 3);
 			}
 		}
 	}

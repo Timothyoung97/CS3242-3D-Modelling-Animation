@@ -82,7 +82,6 @@ namespace subdivisionLoop
 		Eigen::Vector3d adjVertex1(vertexList[adjacentVertex1][0], vertexList[adjacentVertex1][1], vertexList[adjacentVertex1][2]);
 		Eigen::Vector3d adjVertex2(vertexList[adjacentVertex2][0], vertexList[adjacentVertex2][1], vertexList[adjacentVertex2][2]);
 		return 3.0 / 8.0 * (edgeVertex1 + edgeVertex2) + 1.0 / 8.0 * (adjVertex1 + adjVertex2); // v = 3.0 / 8.0 * (a + b) + 1.0 / 8.0 * (c + d)
-
 	}
 
 	/// <summary>
@@ -109,7 +108,7 @@ namespace subdivisionLoop
 	/// </summary>
 	/// <param name="vertexList">Vertex list</param>
 	/// <param name="originalVertex">Original Vertex</param>
-	/// <param name="neighboringVertexIndices">set of all neighbouring vertices</param>
+	/// <param name="neighboringVertexIndices">set of all neighboring vertices</param>
 	/// <param name="version">B = {2 options, refer to pg15 of the referenced material}</param>
 	/// <returns>New vertex</returns>
 	Eigen::Vector3d generateEvenLoopVertexInterior(double vertexList[MAXV][3], int originalVertex, std::set<int> neighboringVertexIndices, int version)

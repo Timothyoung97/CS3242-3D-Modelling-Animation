@@ -21,7 +21,6 @@ myObjType myObj; // object to be drawn
 // global variable
 bool toggleSmooth = FALSE; 				// flag for smooth/flat shading
 bool toggleEdge = FALSE;				// flag for edge visibility
-bool toggleHighlight = FALSE;			// flag for highlighting
 bool toggleColor = FALSE;				// flag for color
 int switchSubdivLoopBetaVersion = 1; 	// flag for switching between beta and alpha version of subdivision loop
 
@@ -37,8 +36,8 @@ using namespace std;
 
 void setupLighting()
 {
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_NORMALIZE);
+	glShadeModel(GL_SMOOTH); // enable smooth shading
+	glEnable(GL_NORMALIZE); // normalize vectors
 
 	// Lights, material properties
     GLfloat	ambientProperties[]  = {0.7f, 0.7f, 0.7f, 1.0f};
@@ -46,6 +45,7 @@ void setupLighting()
     GLfloat	specularProperties[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	GLfloat lightPosition[] = {-100.0f,100.0f,100.0f,1.0f};
 	
+	// Set ambient, diffuse, specular components and position of light 0
     glClearDepth( 1.0 );
 
 	glLightfv( GL_LIGHT0, GL_POSITION, lightPosition);
@@ -58,10 +58,7 @@ void setupLighting()
 	// Default : lighting
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
-
 }
-
-
 
 void display(void)
 {
@@ -86,9 +83,6 @@ void display(void)
 	glPopMatrix();
 	glutSwapBuffers();
 }
-
-
-
 
 void keyboard (unsigned char key, int x, int y)
 {
@@ -134,10 +128,6 @@ void keyboard (unsigned char key, int x, int y)
 	case 'S':
 		toggleSmooth = !toggleSmooth;
 		break;
-	case 'h':
-	case 'H':
-		toggleHighlight = !toggleHighlight;
-		break;
 	case 'o':
 	case 'O':
 	{
@@ -164,6 +154,7 @@ void keyboard (unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
+// mouse event
 void mouse(int button, int state, int x, int y)
 {
   if (state == GLUT_DOWN) {
@@ -178,6 +169,7 @@ void mouse(int button, int state, int x, int y)
   }
 }
 
+// mouse motion event
 void motion(int x, int y)
 {
   if (moving) {
@@ -194,6 +186,7 @@ void motion(int x, int y)
   
 }
 
+// mouse wheel event
 int main(int argc, char **argv)
 {
 	char filename[255];
@@ -204,7 +197,6 @@ int main(int argc, char **argv)
 	myObj.readFile(filename);
 
 	cout << "S: Toggle Smooth Shading" << endl;
-	cout << "H: Toggle Highlight" << endl;
 	cout << "L: Loop Subdivision. Switching beta-version by pressing key 1 (Warran) or 2 (Loop[16])" << endl;
 	cout << "C: Color Components" << endl;
 	cout << "R: Read specific .obj or .off file" << endl;
@@ -219,11 +211,12 @@ int main(int argc, char **argv)
 	cout << "Left mouse click and drag: rotate the object" << endl;
 	cout << "Right mouse click and drag: zooming" << endl;
 
+	// initialize GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize (600, 600);
 	glutInitWindowPosition (50, 50);
-	glutCreateWindow ("CS3241 Assignment 3");
+	glutCreateWindow ("CS3242 Assignment 1");
 	glClearColor (1.0,1.0,1.0, 1.0);
 	glutDisplayFunc(display);
 	glutMouseFunc(mouse);
