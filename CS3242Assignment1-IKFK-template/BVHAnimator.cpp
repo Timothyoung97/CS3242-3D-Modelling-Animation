@@ -464,26 +464,26 @@ void BVHAnimator::solveLeftArm(int frame_no, float scale, float x, float y, floa
 		// (0) Obtain vectors to be used
 		glm::vec3 arm_position(larm->matrix[3]); // Current position of the arm 
 		glm::vec3 forearm_position(lforearm->matrix[3]); // Current position of the forearm
-		glm::quat x_rotate_arm(cos(*LArx * PI / 360), 1, 0, 0); // Rotation around x_axis of arm
-		glm::quat y_rotate_arm(cos(*LAry * PI / 360), 0, 1, 0); // Rotation around y_axis of arm
-		glm::quat z_rotate_arm(cos(*LArz * PI / 360), 0, 0, 1); // Rotation around z_axis of arm
-		glm::quat y_rotate_forearm(cos(*LFAry * PI / 360), 0, 1, 0); // Rotation around y_axis of forearm
+		glm::quat x_axis_rotate_arm(cos(*LArx * PI / 360), 1, 0, 0); // Rotation around x_axis of arm
+		glm::quat y_axis_rotate_arm(cos(*LAry * PI / 360), 0, 1, 0); // Rotation around y_axis of arm
+		glm::quat z_axis_rotate_arm(cos(*LArz * PI / 360), 0, 0, 1); // Rotation around z_axis of arm
+		glm::quat y_axis_rotate_forearm(cos(*LFAry * PI / 360), 0, 1, 0); // Rotation around y_axis of forearm
 
 		// (1) Form Jacobian J from theta and current X with geometric method
-		glm::vec3 r1 = end_effector - arm_position; // distance from shoulder to end_effector
-		glm::vec3 r2 = end_effector - forearm_position; // distance from ellbow to end_effector
+		glm::vec3 shoulder_to_end_dist = end_effector - arm_position; // distance from shoulder to end_effector
+		glm::vec3 elbow_to_end_dist = end_effector - forearm_position; // distance from ellbow to end_effector
 
 		// Create three separate joints for the shoulder, all with the same distance to the end_effector
 		glm::vec3 x_axis_arm = glm::vec3(1, 0, 0);
-		glm::vec3 y_axis_arm = x_rotate_arm * glm::vec3(0, 1, 0);
-		glm::vec3 z_axis_arm = y_rotate_arm * x_rotate_arm * glm::vec3(0, 0, 1);
-		glm::vec3 axis_forearm = z_axis_arm * y_rotate_arm * x_rotate_arm * glm::vec3(0, 1, 0);
+		glm::vec3 y_axis_arm = x_axis_rotate_arm * glm::vec3(0, 1, 0);
+		glm::vec3 z_axis_arm = y_axis_rotate_arm * x_axis_rotate_arm * glm::vec3(0, 0, 1);
+		glm::vec3 axis_forearm = z_axis_arm * y_axis_rotate_arm * x_axis_rotate_arm * glm::vec3(0, 1, 0);
 
 		// Forming Cross products of rotation axis and distance
-		glm::vec3 joint_1 = glm::cross(x_axis_arm, r1);
-		glm::vec3 joint_2 = glm::cross(y_axis_arm, r1);
-		glm::vec3 joint_3 = glm::cross(z_axis_arm, r1);
-		glm::vec3 joint_4 = glm::cross(axis_forearm, r2);
+		glm::vec3 joint_1 = glm::cross(x_axis_arm, shoulder_to_end_dist);
+		glm::vec3 joint_2 = glm::cross(y_axis_arm, shoulder_to_end_dist);
+		glm::vec3 joint_3 = glm::cross(z_axis_arm, shoulder_to_end_dist);
+		glm::vec3 joint_4 = glm::cross(axis_forearm, elbow_to_end_dist);
 
 		glm::mat4x3 J = glm::mat4x3(joint_1, joint_2, joint_3, joint_4);
 
@@ -494,7 +494,8 @@ void BVHAnimator::solveLeftArm(int frame_no, float scale, float x, float y, floa
 
 		// (3) Calculate delta_X;
 		double theta = 1.4;
-		glm::vec3 delta_x((destination[0] - end_effector[0]) / theta,
+		glm::vec3 delta_x(
+			(destination[0] - end_effector[0]) / theta,
 			(destination[1] - end_effector[1]) / theta,
 			(destination[2] - end_effector[2]) / theta);
 
