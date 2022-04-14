@@ -430,101 +430,99 @@ void BVHAnimator::solveLeftArm(int frame_no, float scale, float x, float y, floa
     //
     // Put your code below
     // -------------------------------------------------------
-	int max_iter = 3000;
-	int num_iter = 0;
+	int curr_iter_count = 0;
+	int maximum_iteration = 2000;
 	double err_margin = 0.02;
 
 	glm::vec3 end_effector = glm::vec3(lhand->matrix[3]);
-
 	glm::vec3 destination(x, y, z);
+	
+	float max_distance = glm::distance(rhand->matrix[3], rarm->matrix[3]) + err_margin - 0.01; // max distance is the length of the arm
+	
+	glm::vec3 larmPosition(larm->matrix[3]); // origin of the left arm
+	
+	float curr_distance_from_shoulder = glm::distance(larmPosition, destination); // distance from shouder to the destination point
 
-
-	float max_distance = glm::distance(rhand->matrix[3], rarm->matrix[3]) + err_margin - 0.01;
-	glm::vec3 larmPosition(larm->matrix[3]);
-	float curr_distance_from_shoulder = glm::distance(larmPosition, destination);
-
-	// if the target is not reachable, translate the destination to the closest possible point to the circle with the shoulder as the center
-	// and with radius "max_distance" 
+	// if the targeted destination is longer than the maximum reachable distance (length of the left arm),
+	// then we limit and shift the destination to the closest point of a sphere formed:
+	// 1. with origin as shoulder 
+	// 2. and radius as the length of the left arm
 	if (curr_distance_from_shoulder > max_distance) {
-		glm::vec3 destination_direction = destination - larmPosition;
-		float distanceFromShoulder = glm::distance(larmPosition, destination);
-		float scale = max_distance / distanceFromShoulder;
-		glm::vec3 displace = destination_direction * scale;
+		glm::vec3 shoulder_to_dest_vector = destination - larmPosition;
+		float distance_from_shoulder = glm::distance(larmPosition, destination);
+		float scale = max_distance / distance_from_shoulder;
+		glm::vec3 displace = shoulder_to_dest_vector * scale;
 
 		destination = larmPosition + displace;
 	}
 
 	double vec_err = glm::distance(end_effector, destination);
 
+	// While maximum_iteration is not reached and error not small enough
+	while (curr_iter_count < maximum_iteration && vec_err > err_margin) {
 
-	// While max_iter not reached and error not small enough
-	while (num_iter < max_iter && vec_err > err_margin) {
-
-		// 0. Compute some vectors that are used later
-
+		// (0) Obtain vectors to be used
 		glm::vec3 arm_position(larm->matrix[3]); // Current position of the arm 
 		glm::vec3 forearm_position(lforearm->matrix[3]); // Current position of the forearm
-
-
 		glm::quat x_rotate_arm(cos(*LArx * PI / 360), 1, 0, 0); // Rotation around x_axis of arm
 		glm::quat y_rotate_arm(cos(*LAry * PI / 360), 0, 1, 0); // Rotation around y_axis of arm
 		glm::quat z_rotate_arm(cos(*LArz * PI / 360), 0, 0, 1); // Rotation around z_axis of arm
-
 		glm::quat y_rotate_forearm(cos(*LFAry * PI / 360), 0, 1, 0); // Rotation around y_axis of forearm
 
-	// 1. Compute Jacobian J from theta and current X with geometric method
+		// (1) Form Jacobian J from theta and current X with geometric method
 		glm::vec3 r1 = end_effector - arm_position; // distance from shoulder to end_effector
 		glm::vec3 r2 = end_effector - forearm_position; // distance from ellbow to end_effector
-		// std::cout << glm::to_string(lhand->transform) << std::endl;
 
-		// We have to create three separate joints for the shoulder, all with the same distance to the end_effector
+		// Create three separate joints for the shoulder, all with the same distance to the end_effector
 		glm::vec3 x_axis_arm = glm::vec3(1, 0, 0);
 		glm::vec3 y_axis_arm = x_rotate_arm * glm::vec3(0, 1, 0);
 		glm::vec3 z_axis_arm = y_rotate_arm * x_rotate_arm * glm::vec3(0, 0, 1);
 		glm::vec3 axis_forearm = z_axis_arm * y_rotate_arm * x_rotate_arm * glm::vec3(0, 1, 0);
 
-		// Cross products of rotation axis and distance
-		glm::vec3 J_0_1 = glm::cross(x_axis_arm, r1);
-		glm::vec3 J_0_2 = glm::cross(y_axis_arm, r1);
-		glm::vec3 J_0_3 = glm::cross(z_axis_arm, r1);
-		glm::vec3 J_0_4 = glm::cross(axis_forearm, r2);
+		// Forming Cross products of rotation axis and distance
+		glm::vec3 joint_1 = glm::cross(x_axis_arm, r1);
+		glm::vec3 joint_2 = glm::cross(y_axis_arm, r1);
+		glm::vec3 joint_3 = glm::cross(z_axis_arm, r1);
+		glm::vec3 joint_4 = glm::cross(axis_forearm, r2);
 
-		glm::mat4x3 J = glm::mat4x3(J_0_1, J_0_2, J_0_3, J_0_4);
+		glm::mat4x3 J = glm::mat4x3(joint_1, joint_2, joint_3, joint_4);
 
 
-		// 2. Compute Pseudoinverse J^-1
-		glm::mat3x4 J_inv = glm::transpose(J) * glm::inverse(J * glm::transpose(J) + glm::mat3(0.01 * 0.01));
+		// (2) Calculate (Moore-Penrose) Pseudoinverse J^-1
+		glm::mat3x4 inverse_J = glm::transpose(J) * glm::inverse(J * glm::transpose(J) + glm::mat3(0.01 * 0.01));
 
-		// 3. Compute delta_X;
-		double theta = 1.4; // (num_iter + 1.) / (num_iter) ;
+
+		// (3) Calculate delta_X;
+		double theta = 1.4;
 		glm::vec3 delta_x((destination[0] - end_effector[0]) / theta,
 			(destination[1] - end_effector[1]) / theta,
-			(destination[2] - end_effector[2]) / theta); //   / max_iter;
+			(destination[2] - end_effector[2]) / theta);
 
-// 4. Compute delta_theta from J^-1 and delta_X
-		glm::vec4 delta_theta = J_inv * delta_x;
 
-		// 5. Update theta as theta + delta_theta
+		// (4) Compute delta_theta from J^-1 and delta_X
+		glm::vec4 delta_theta = inverse_J * delta_x;
 
+
+		// (5) Update theta as theta + delta_theta
 		*LArx += delta_theta[0] * 180 / PI;
 		*LAry += delta_theta[1] * 180 / PI;
 		*LArz += delta_theta[2] * 180 / PI;
 		*LFAry += delta_theta[3] * 180 / PI;
 
-		// 6. Do forward kinematics
+
+		// (6) Forward kinematics
 		_bvh->matrixMoveTo(frame_no, scale);
 
-		// 7. Update distance from new end_effector position target
 
+		// (7) Update vec_err from end_effector to the destination
 		end_effector = glm::vec3(lhand->matrix[3]);
 
 		vec_err = glm::distance(end_effector, destination);
-		// std::cout << vec_err << std::endl;
 
-		num_iter++;
+		curr_iter_count++;
 
-		if (num_iter == max_iter) {
-			std::cout << "Max iter reached" << std::endl;
+		if (curr_iter_count == maximum_iteration) {
+			std::cout << "Iteration 2000 reached" << std::endl;
 		}
 	}
 

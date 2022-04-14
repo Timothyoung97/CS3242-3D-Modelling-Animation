@@ -1,10 +1,4 @@
-﻿  BVH.cpp
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVH.cpp(127,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVH.cpp(128,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVH.cpp(129,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVH.cpp(177,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVH.cpp(190,62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  BVHAnimator.cpp
+﻿  BVHAnimator.cpp
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(114,62): warning C4244: 'argument': conversion from 'GLdouble' to 'GLint', possible loss of data
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(114,54): warning C4244: 'argument': conversion from 'GLdouble' to 'GLint', possible loss of data
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(154,23): warning C4305: 'initializing': truncation from 'double' to 'float'
@@ -16,15 +10,15 @@ C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(320,30): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(343,30): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(346,30): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(442,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(440,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(467,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(468,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(469,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(470,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(471,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(473,33): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(470,33): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(507,33): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(508,33): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(509,33): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(510,33): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(511,33): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(512,34): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHAnimator.cpp(510,34): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   BVHPlayer.cpp
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHPlayer.cpp(49,22): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\TimFolder\Study\AY2122_S2\CS3242\CS3242-Docs\CS3242Assignment1-IKFK-template\BVHPlayer.cpp(49,38): warning C4305: 'initializing': truncation from 'double' to 'float'
